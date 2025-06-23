@@ -17,7 +17,8 @@ def finalizar(inicio,barra_total,tiempo_barra,seleccion,pregunta,respuestas,rond
     if calcular_barra(inicio,barra_total,tiempo_barra) <= 0:
         mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda)
         os.system('cls')
-        print("Te quedaste sin tiempo")
+        print("Te quedaste sin tiempo :c")
+        os.system('pause')
         retorno = True
     return retorno
 
@@ -145,7 +146,6 @@ def jugar_runer_preguntados(barra_total,tiempo_barra,seleccion):
             if ronda>4:
                 os.system('cls')
                 print("FELICIDADES LLEGASTE A CASA")
-                os.system('pause')
                 exit()
             pregunta,respuestas,correcta = preguntas_respuestas(preguntas,ronda)
             if jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda):
