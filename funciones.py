@@ -5,14 +5,18 @@ from colorama import init, Fore, Style
 from datos import *
 from funciones import *
 
-def calcular_barra(inicio,barra_total,tiempo_barra):
+def tiempo_restante(inicio,tiempo_barra):
     transcurrido = time.time() - inicio
     restante = tiempo_barra - transcurrido
+    return restante
+
+def calcular_barra(inicio,barra_total,tiempo_barra):
+    restante = tiempo_restante(inicio,tiempo_barra)
     largo = int((restante / tiempo_barra) * barra_total)
     return largo
 
 
-def finalizar(inicio,barra_total,tiempo_barra,seleccion,pregunta,respuestas,ronda):
+def finalizar(inicio,barra_total,tiempo_barra):
     retorno = False
     if calcular_barra(inicio,barra_total,tiempo_barra) <= 0:
         retorno = True
@@ -74,7 +78,7 @@ def mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta):
 def jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda):
     inicio = time.time()
     segundo_anterior = int(time.time())
-    retorno=False
+    retorno = [False, 0]
     
     while True:
         # Actualizar pantalla cada segundo
@@ -83,10 +87,11 @@ def jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,
             mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda)
         
         # Finalizar cuando se acaba el tiempo
-        if finalizar(inicio,barra_total,tiempo_barra,seleccion,pregunta,respuestas,ronda):
+        if finalizar(inicio,barra_total,tiempo_barra):
+            restante = 0
             if seleccion == correcta:
                 mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta)
-                retorno = True
+                retorno[0] = True
                 break
             else:
                 mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta)
@@ -100,14 +105,16 @@ def jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,
                 case 2:
                     seleccion = (seleccion + 1) % len(respuestas)
                 case 3:
+                    restante = tiempo_restante(inicio,tiempo_barra)
+                    mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta)
                     if seleccion == correcta:
-                        mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta)
-                        retorno = True
+                        retorno[0] = True
                         break
                     else:
-                        mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta)
                         break
             mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda)
+    
+    retorno[1] = restante
     return retorno
 
 def menu_juego():
@@ -144,13 +151,22 @@ def jugar_runer_preguntados(barra_total,tiempo_barra,seleccion):
                 exit()
         
         ronda=0
+        puntos=0
+        seleccion = 1
         while True:
             if ronda>4:
                 os.system('cls')
                 print("FELICIDADES LLEGASTE A CASA")
+                print(f"Tu puntaje final es: {puntos} puntos")
                 exit()
             pregunta,respuestas,correcta = preguntas_respuestas(preguntas,ronda)
-            if jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda):
+            resultado = jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda)
+            if resultado[0]:
                 ronda+=1
+                puntos+= int(100 + resultado[1] * 100)
+                os.system('pause')
             else:
+                os.system('cls')
+                print(f"Tu puntaje final es: {puntos} puntos")
+                os.system('pause')
                 break

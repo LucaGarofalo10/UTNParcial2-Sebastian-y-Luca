@@ -1,5 +1,5 @@
 barra_total = 40  # Largo total de la barra
-tiempo_barra = 10  # Segundos que tarda en vaciarse la barra
+tiempo_barra = 2  # Segundos que tarda en vaciarse la barra
 preguntas = [
     {
         "pregunta": "¿Cuál es la capital de Francia?",
@@ -14,7 +14,7 @@ preguntas = [
     {
         "pregunta": "¿Quién escribió 'Cien años de soledad'?",
         "respuestas": ["a) Gabriel García Márquez", "b) Pablo Neruda", "c) Julio Cortázar"],
-        "correcta": 0
+        "correcta": 1
     },
     {
         "pregunta": "¿Cuál es el resultado de 9 x 7?",
