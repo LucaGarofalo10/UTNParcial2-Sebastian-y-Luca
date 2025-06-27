@@ -3,7 +3,6 @@ import msvcrt
 import time
 from colorama import init, Fore, Style
 from datos import *
-from funciones import *
 
 def tiempo_restante(inicio,tiempo_barra):
     transcurrido = time.time() - inicio
@@ -164,7 +163,6 @@ def jugar_runer_preguntados(barra_total,tiempo_barra,seleccion):
             if resultado[0]:
                 ronda+=1
                 puntos+= int(100 + resultado[1] * 100)
-                os.system('pause')
             else:
                 os.system('cls')
                 print(f"Tu puntaje final es: {puntos} puntos")

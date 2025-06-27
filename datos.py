@@ -1,5 +1,5 @@
 barra_total = 40  # Largo total de la barra
-tiempo_barra = 2  # Segundos que tarda en vaciarse la barra
+tiempo_barra = 10  # Segundos que tarda en vaciarse la barra
 preguntas = [
     {
         "pregunta": "¿Cuál es la capital de Francia?",
