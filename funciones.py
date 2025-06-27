@@ -15,10 +15,6 @@ def calcular_barra(inicio,barra_total,tiempo_barra):
 def finalizar(inicio,barra_total,tiempo_barra,seleccion,pregunta,respuestas,ronda):
     retorno = False
     if calcular_barra(inicio,barra_total,tiempo_barra) <= 0:
-        mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda)
-        os.system('cls')
-        print("Te quedaste sin tiempo :c")
-        os.system('pause')
         retorno = True
     return retorno
 
@@ -88,7 +84,13 @@ def jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,
         
         # Finalizar cuando se acaba el tiempo
         if finalizar(inicio,barra_total,tiempo_barra,seleccion,pregunta,respuestas,ronda):
-            break
+            if seleccion == correcta:
+                mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta)
+                retorno = True
+                break
+            else:
+                mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta)
+                break
         
         # Cambiar opcion
         if msvcrt.kbhit():
