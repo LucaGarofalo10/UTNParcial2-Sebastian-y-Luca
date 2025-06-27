@@ -1,7 +1,3 @@
-import os
-import msvcrt
-import time
-from colorama import init, Fore, Style
 from datos import *
 from funciones import *
 seleccion = 0
