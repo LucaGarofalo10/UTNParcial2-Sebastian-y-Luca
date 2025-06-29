@@ -4,6 +4,8 @@ import time
 from colorama import init, Fore, Style
 from datos import *
 
+#============================datos============================#
+
 def tiempo_restante(inicio,tiempo_barra):
     transcurrido = time.time() - inicio
     restante = tiempo_barra - transcurrido
@@ -14,6 +16,14 @@ def calcular_barra(inicio,barra_total,tiempo_barra):
     largo = int((restante / tiempo_barra) * barra_total)
     return largo
 
+def preguntas_y_respuestas(preguntas,ronda):
+    pregunta_actual = preguntas[ronda]
+    pregunta = pregunta_actual["pregunta"]
+    respuestas = pregunta_actual["respuestas"]
+    correcta = pregunta_actual["correcta"]
+    return pregunta, respuestas, correcta
+
+#============================deteccion============================#
 
 def finalizar(inicio,barra_total,tiempo_barra):
     retorno = False
@@ -31,6 +41,26 @@ def detectar_tecla():
             retorno = 2 # Flecha abajo
         case b'M':  
             retorno = 3 # Flecha derecha
+    return retorno
+
+#============================pantalla============================#
+
+def menu_juego():
+    retorno = False
+    while True:
+        os.system('cls')
+        print("Bienvenido a Preguntados Runner")
+        print("1. Empezar juego")
+        print("2. Salir")
+        opcion = input()
+        match opcion:
+            case "1":
+                break
+            case "2":
+                retorno = True
+            case _:
+                print("Opción inválida. Intenta de nuevo.")
+                os.system('pause')
     return retorno
 
 def mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda):
@@ -74,7 +104,9 @@ def mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta):
         print("Opcion " + Fore.RED + "INCORECTA" + Style.RESET_ALL + " empieza de 0 :c")
     os.system('pause')
 
-def jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda):
+#============================juego============================#
+
+def jugar_ronda(barra_total, tiempo_barra, seleccion, pregunta, respuestas, correcta, ronda):
     inicio = time.time()
     segundo_anterior = int(time.time())
     retorno = [False, 0]
@@ -116,49 +148,24 @@ def jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,
     retorno[1] = restante
     return retorno
 
-def menu_juego():
+def jugar_runer_preguntados(barra_total, tiempo_barra, seleccion):
     while True:
-        os.system('cls')
-        print("Bienvenido a Preguntados Runner")
-        print("1. Empezar juego")
-        print("2. Salir")
-        opcion = input()
-        if opcion == "1":
-            break
-        elif opcion == "2":
-            break
-        else:
-            print("Opción inválida. Intenta de nuevo.")
-            os.system('pause')
-    return opcion
-
-def preguntas_respuestas(preguntas,ronda):
-    pregunta_actual = preguntas[ronda]
-    pregunta = pregunta_actual["pregunta"]
-    respuestas = pregunta_actual["respuestas"]
-    correcta = pregunta_actual["correcta"]
-    return pregunta, respuestas, correcta
-
-def jugar_runer_preguntados(barra_total,tiempo_barra,seleccion):
-    while True:
-        match menu_juego():
-            case "1":
-                pass
-            case "2":
-                os.system('cls')
-                print("¡Hasta luego!")
-                exit()
+        if menu_juego():
+            os.system('cls')
+            print("¡Hasta luego!")
+            exit()
         
         ronda=0
         puntos=0
         seleccion = 1
+        
         while True:
             if ronda>4:
                 os.system('cls')
                 print("FELICIDADES LLEGASTE A CASA")
                 print(f"Tu puntaje final es: {puntos} puntos")
                 exit()
-            pregunta,respuestas,correcta = preguntas_respuestas(preguntas,ronda)
+            pregunta,respuestas,correcta = preguntas_y_respuestas(preguntas,ronda)
             resultado = jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda)
             if resultado[0]:
                 ronda+=1
