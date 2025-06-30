@@ -4,7 +4,7 @@ preguntas = [
     # CIENCIA
     {"categoria": "Ciencia", "dificultad": "Fácil", "pregunta": "¿Qué planeta es conocido como el planeta rojo?", "respuestas": ["Marte", "Júpiter", "Venus"], "correcta": 0},
     {"categoria": "Ciencia", "dificultad": "Fácil", "pregunta": "¿Cuál es el estado del agua a 0°C?", "respuestas": ["Sólido", "Líquido", "Gas"], "correcta": 0},
-    {"categoria": "Ciencia", "dificultad": "Fácil", "pregunta": "¿Qué gas respiramos principalmente?", "respuestas": ["Oxígeno", "Hidrógeno", "Nitrógeno"], "correcta": 2},
+    {"categoria": "Ciencia", "dificultad": "Fácil", "pregunta": "¿Qué gas respiramos principalmente?", "respuestas": ["Oxígeno", "Hidrógeno", "Nitrógeno"], "correcta": 0},
     {"categoria": "Ciencia", "dificultad": "Fácil", "pregunta": "¿Cuál es el hueso más largo del cuerpo humano?", "respuestas": ["Fémur", "Radio", "Húmero"], "correcta": 0},
     {"categoria": "Ciencia", "dificultad": "Fácil", "pregunta": "¿Qué órgano bombea sangre?", "respuestas": ["Corazón", "Pulmón", "Hígado"], "correcta": 0},
 
