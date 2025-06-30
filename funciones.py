@@ -31,7 +31,7 @@ def pregunta_aleatoria(preguntas,categoria,dificultad,elegidas):
         pregunta_actual = preguntas[random.randint(0, 4) + categoria + dificultad]
     return pregunta_actual
 
-def preguntas_y_respuestas(preguntas,ronda,categoria,dificultad,elegidas):
+def preguntas_y_respuestas(preguntas,categoria,dificultad,elegidas):
     pregunta_actual = pregunta_aleatoria(preguntas,categoria,dificultad,elegidas)
     elegidas.append(pregunta_actual)
     pregunta = pregunta_actual["pregunta"]
@@ -48,6 +48,16 @@ def sumar_puntos(puntos,resultado,dificultad):
         case 10:
             puntos+= int(150 + resultado[1] * 150)
     return puntos
+
+def obtener_tiempo_barra(dificultad):
+    match dificultad:
+        case 0:
+            tiempo_barra = dificultad_facil
+        case 5:
+            tiempo_barra = dificultad_normal
+        case 10:
+            tiempo_barra = dificultad_dificil
+    return tiempo_barra
 
 #========================================================== DETECCION ==========================================================#
 
@@ -110,31 +120,6 @@ def mostrar_tutorial(seleccion,respuestas):
     print("\n[=== Esta barra se ira reduciendo con el tiempo ===]")
 
 #---------- Preparación ----------#
-def menu_juego():
-    retorno = False
-    categoria = 0
-    dificultad = 0
-    while True:
-        os.system('cls')
-        print("Bienvenido a Preguntados Runner")
-        print("1. Empezar juego")
-        print("2. Tutorial")
-        print("3. Salir")
-        opcion = input()
-        match opcion:
-            case "1":
-                categoria=elegir_categoria()
-                dificultad=elegir_dificultad()
-                break
-            case "2":
-                tutorial()
-            case "3":
-                retorno = True
-                break
-            case _:
-                print("Opción inválida. Intenta de nuevo.")
-                os.system('pause')
-    return retorno,categoria,dificultad
 
 def elegir_dificultad():
     while True:
@@ -197,8 +182,15 @@ def mostrar_categoria(categoria):
             retorno = "Entretenimiento"
     return retorno
 
+def guardar_puntuacion(nombre, puntos):
+    puntuacion = {}
+    puntuacion["nombre"] = nombre
+    puntuacion["puntos"] = puntos
+    puntuaciones.append(puntuacion)
+    return puntuaciones
+
 #---------- Juego ----------# 
-def mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda,categoria):
+def mostrar_juego(inicio,seleccion,tiempo_barra,pregunta,respuestas,ronda,categoria):
     os.system('cls')  # limpiar pantalla en Windows
 
     print(f"Categoría: {mostrar_categoria(categoria)} | RONDA {ronda+1}/5\n")
@@ -211,7 +203,7 @@ def mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda,categoria):
         print(f"{marcador} {opcion}")
     print("\n" + "[" + "="*calcular_barra(inicio,barra_total,tiempo_barra) + "]")
 
-def mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta,ronda,categoria):
+def mostrar_correcta(inicio,seleccion,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria):
     os.system('cls')  # limpiar pantalla en Windows
 
     print(f"Categoría: {mostrar_categoria(categoria)} | RONDA {ronda+1}/5\n")
@@ -240,9 +232,50 @@ def mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta,ronda,categor
         print("Opcion " + Fore.RED + "INCORECTA" + Style.RESET_ALL + " empieza de 0 :c")
     os.system('pause')
 
+def mostrar_puntuacion():
+    os.system('cls')
+    print("Puntuaciones:")
+    if len(puntuaciones) == 0:
+        print("No hay puntuaciones guardadas.")
+    for puntuacion in puntuaciones:
+        if puntuacion["nombre"] == "":
+            print(f"?????: ", end="")
+        else:
+            print(f"{puntuacion['nombre']}: ", end="")
+        print(f"{puntuacion['puntos']} puntos")
+    os.system('pause')
 #=============================================================== JUEGO ===============================================================#
 
-def jugar_runer_preguntados(barra_total, tiempo_barra, seleccion):
+def menu_juego():
+    retorno = False
+    categoria = 0
+    dificultad = 0
+    while True:
+        os.system('cls')
+        print("Bienvenido a Preguntados Runner")
+        print("1. Empezar juego")
+        print("2. Tutorial")
+        print("3. Puntuaciones")
+        print("4. Salir")
+        opcion = input()
+        match opcion:
+            case "1":
+                categoria=elegir_categoria()
+                dificultad=elegir_dificultad()
+                break
+            case "2":
+                tutorial()
+            case "3":
+                mostrar_puntuacion()
+            case "4":
+                retorno = True
+                break
+            case _:
+                print("Opción inválida. Intenta de nuevo.")
+                os.system('pause')
+    return retorno,categoria,dificultad
+
+def jugar_runer_preguntados():
     while True:
         salir,categoria,dificultad = menu_juego()
         if salir:
@@ -261,9 +294,12 @@ def jugar_runer_preguntados(barra_total, tiempo_barra, seleccion):
                 print("FELICIDADES LLEGASTE A CASA\n")
                 print(f"Tu puntaje final es: {puntos} puntos")
                 os.system('pause')
+                nombre = input("\nIngresa un nombre para guardar tu puntaje: ")
+                guardar_puntuacion(nombre, puntos)
                 break
             
-            pregunta,respuestas,correcta = preguntas_y_respuestas(preguntas,ronda,categoria,dificultad,elegidas)
+            pregunta,respuestas,correcta = preguntas_y_respuestas(preguntas,categoria,dificultad,elegidas)
+            tiempo_barra = obtener_tiempo_barra(dificultad)
             resultado = jugar_ronda(barra_total,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda,categoria)
             if resultado[0]:
                 ronda+=1
@@ -271,7 +307,9 @@ def jugar_runer_preguntados(barra_total, tiempo_barra, seleccion):
 
             else:
                 os.system('cls')
-                print(f"Tu puntaje final es: {puntos} puntos")
+                print(f"Tu puntaje final es: {puntos} puntos\n")
+                nombre = input("Ingresa un nombre para guardar tu puntaje: ")
+                guardar_puntuacion(nombre, puntos)
                 os.system('pause')
                 break
 
@@ -284,17 +322,17 @@ def jugar_ronda(barra_total, tiempo_barra, seleccion, pregunta, respuestas, corr
         # Actualizar pantalla cada segundo
         if int(time.time()) != segundo_anterior:
             segundo_anterior = int(time.time())
-            mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda,categoria)
+            mostrar_juego(inicio,seleccion,tiempo_barra,pregunta,respuestas,ronda,categoria)
 
         # Finalizar cuando se acaba el tiempo
         if finalizar(inicio,barra_total,tiempo_barra):
             restante = 0
             if seleccion == correcta:
-                mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta,ronda,categoria)
+                mostrar_correcta(inicio,seleccion,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria)
                 retorno[0] = True
                 break
             else:
-                mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta,ronda,categoria)
+                mostrar_correcta(inicio,seleccion,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria)
                 break
         
         # Cambiar opcion
@@ -306,13 +344,13 @@ def jugar_ronda(barra_total, tiempo_barra, seleccion, pregunta, respuestas, corr
                     seleccion = (seleccion + 1) % len(respuestas)
                 case 3:
                     restante = tiempo_restante(inicio,tiempo_barra)
-                    mostrar_correcta(inicio,seleccion,pregunta,respuestas,correcta,ronda,categoria)
+                    mostrar_correcta(inicio,seleccion,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria)
                     if seleccion == correcta:
                         retorno[0] = True
                         break
                     else:
                         break
-            mostrar_menu(inicio,seleccion,pregunta,respuestas,ronda,categoria)
+            mostrar_juego(inicio,seleccion,tiempo_barra,pregunta,respuestas,ronda,categoria)
     
     retorno[1] = restante
     return retorno
