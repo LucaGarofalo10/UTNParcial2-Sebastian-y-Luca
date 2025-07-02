@@ -1,0 +1,46 @@
+pregunta,opcion1,opcion2,opcion3,respuesta_correcta,categoria,tiempo,puntaje
+¿Qué planeta es conocido como el planeta rojo?,Venus,Júpiter,Marte,2,Ciencia,14,50
+¿Cuál es el estado del agua a 0°C?,Líquido,Gas,Sólido,2,Ciencia,14,50
+¿Qué gas respiramos principalmente?,Oxígeno,Nitrógeno,Hidrógeno,1,Ciencia,14,50
+¿Cuál es el hueso más largo del cuerpo humano?,Radio,Fémur,Húmero,1,Ciencia,14,50
+¿Qué órgano bombea sangre?,Corazón,Hígado,Pulmón,0,Ciencia,14,50
+¿Cuántos elementos hay en la tabla periódica?,112,118,100,1,Ciencia,10,100
+¿Qué tipo de energía produce el Sol?,Nuclear,Cinética,Térmica,0,Ciencia,10,100
+¿Qué científico desarrolló la teoría de la relatividad?,Tesla,Newton,Einstein,2,Ciencia,10,100
+¿Qué parte de la célula contiene el ADN?,Mitocondria,Citoplasma,Núcleo,2,Ciencia,10,100
+¿Cuál es la fórmula química del agua?,NaCl,CO2,H2O,2,Ciencia,10,100
+¿Qué partícula subatómica tiene carga positiva?,Neutrón,Protón,Electrón,1,Ciencia,8,150
+¿Qué ley describe la gravedad?,Ley de Faraday,Ley de Newton,Ley de Ohm,1,Ciencia,8,150
+¿Qué científico descubrió la penicilina?,Fleming,Darwin,Curie,0,Ciencia,8,150
+¿Qué unidad mide la intensidad de corriente?,Voltio,Ohmio,Amperio,2,Ciencia,8,150
+¿Qué planeta tiene un día más largo que su año?,Venus,Saturno,Mercurio,0,Ciencia,8,150
+¿Quién fue el primer presidente de Argentina?,San Martín,Belgrano,Rivadavia,2,Historia,14,50
+¿En qué año fue la Revolución de Mayo?,1816,1806,1810,2,Historia,14,50
+¿De qué país era Napoleón?,Italia,Francia,España,1,Historia,14,50
+¿Cuál fue la causa de la Segunda Guerra Mundial?,Invasión a Polonia,Colonialismo,Muerte de un archiduque,0,Historia,14,50
+¿Quién escribió el Martín Fierro?,Rosas,Sarmiento,José Hernández,2,Historia,14,50
+¿Quién descubrió América?,Cristóbal Colón,Magallanes,Américo Vespucio,0,Historia,10,100
+¿Qué imperio construyó el Coliseo?,Romano,Griego,Egipcio,0,Historia,10,100
+¿Qué país fue dividido por el Muro de Berlín?,Austria,Polonia,Alemania,2,Historia,10,100
+¿Quién fue Juana de Arco?,Heroína francesa,Emperatriz romana,Reina inglesa,0,Historia,10,100
+¿Qué guerra terminó en 1945?,Primera Guerra Mundial,Segunda Guerra Mundial,Guerra Fría,1,Historia,10,100
+¿Qué tratado puso fin a la Primera Guerra Mundial?,Tratado de París,Tratado de Viena,Tratado de Versalles,2,Historia,8,150
+¿En qué año cayó el Imperio Romano de Occidente?,1066,1492,476,2,Historia,8,150
+¿Qué revolución ocurrió en 1917?,Industrial,Francesa,Rusa,2,Historia,8,150
+¿Quién fue Ramsés II?,Emperador griego,Faraón egipcio,Rey babilonio,1,Historia,8,150
+¿Qué país inició la Reforma Protestante?,Italia,Alemania,Inglaterra,1,Historia,8,150
+¿Quién es el protagonista de Harry Potter?,Harry Potter,Hermione Granger,Ron Weasley,0,Entretenimiento,14,50
+¿Qué personaje es amarillo y vive en una piña?,Minion,Homero,Bob Esponja,2,Entretenimiento,14,50
+¿Qué saga tiene un anillo único?,El Señor de los Anillos,Star Wars,Harry Potter,0,Entretenimiento,14,50
+¿Quién canta 'Thriller'?,Michael Jackson,Elvis Presley,Madonna,0,Entretenimiento,14,50
+¿Qué videojuego tiene a Mario como personaje?,Super Mario,Zelda,Minecraft,0,Entretenimiento,14,50
+¿Quién dirigió 'Titanic'?,Peter Jackson,James Cameron,Steven Spielberg,1,Entretenimiento,10,100
+¿Qué serie tiene dragones y tronos?,The Witcher,Vikings,Game of Thrones,2,Entretenimiento,10,100
+¿Qué película tiene a Thanos como villano?,Avengers,Thor,Iron Man,0,Entretenimiento,10,100
+¿Cuál es el apellido de Sherlock?,Holmes,Moriarty,Watson,0,Entretenimiento,10,100
+¿Qué personaje usa una espada láser?,Neo,Bilbo,Luke Skywalker,2,Entretenimiento,10,100
+¿Qué actor interpretó a Gandalf?,Ian McKellen,Anthony Hopkins,Patrick Stewart,0,Entretenimiento,8,150
+¿Quién ganó el Oscar a mejor película en 2020?,Joker,Parasite,1917,1,Entretenimiento,8,150
+¿Qué director hizo 'Pulp Fiction'?,Tarantino,Kubrick,Scorsese,0,Entretenimiento,8,150
+¿Qué banda compuso 'Bohemian Rhapsody'?,The Beatles,Queen,Pink Floyd,1,Entretenimiento,8,150
+¿En qué año salió el primer PlayStation?,1999,2001,1994,2,Entretenimiento,8,150

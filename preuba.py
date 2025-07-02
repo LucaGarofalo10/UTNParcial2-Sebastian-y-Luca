@@ -1,20 +1,20 @@
-preguntas = [1,2,3,4,5,6,7,8,9,10]
-vueltas = 0
+import re
 
-while vueltas < len(preguntas):
-    vueltas = 0
-    print("while")
-    pregunta_actual = 51
-    
-    for pregunta in preguntas:
-        print(pregunta)
-        if pregunta_actual == pregunta:
-            print("igual")
-            break  # salimos del for si encontramos la pregunta
-        vueltas += 1
-    
-    print("a")
-    if vueltas > len(preguntas):
-        print("dentro del if")
-        print(pregunta_actual)
-        print(vueltas)
+def preguntas_csv(categoria,dificultad):
+    preguntas_ronda = {}
+    with open("preguntas.csv", encoding="utf-8") as archivo:
+        for i in range(0, categoria + dificultad + 1):
+            archivo.readline()
+        for i in range(0, 5):
+            pregunta = archivo.readline()
+            pregunta = re.split(r',', pregunta.strip())
+            preguntas_ronda[i] = {
+                "pregunta": pregunta[0],
+                "respuestas": pregunta[1:4],
+                "correcta": int(pregunta[4]),
+                "tiempo": int(pregunta[6]),
+                "puntaje": int(pregunta[7])
+            }
+    return preguntas_ronda
+
+print(preguntas_csv(0, 5))  # Test the function with example parameters
