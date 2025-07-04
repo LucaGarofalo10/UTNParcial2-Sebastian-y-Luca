@@ -1,9 +1,30 @@
-{
+[
+    {
     "nombre": "Jugador1",
-    "contraseña": "1234",
-    "aciertos": 8,
-    "errores": 2,
-    "total_preguntas": 10,
-    "tiempo_total": 52.6,
-    "partidas": 1
-}
+    "partidas": [
+        {
+        "tiempo_total": 45.2,
+        "aciertos": 8,
+        "errores": 2,
+        "puntos": 80
+        },
+        {
+        "tiempo_total": 60.5,
+        "aciertos": 10,
+        "errores": 0,
+        "puntos": 100
+        }
+    ]
+    },
+    {
+    "nombre": "Jugador2",
+    "partidas": [
+        {
+        "tiempo_total": 30.7,
+        "aciertos": 5,
+        "errores": 5,
+        "puntos": 50
+        }
+    ]
+    }
+]
