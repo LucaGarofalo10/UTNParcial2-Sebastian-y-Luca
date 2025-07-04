@@ -38,6 +38,7 @@ def preguntas_csv(categoria,dificultad):
     with open("preguntas.csv", encoding="utf-8") as archivo:
         for i in range(0, categoria + dificultad + 1):
             archivo.readline()
+        
         for i in range(0, 5):
             pregunta = archivo.readline()
             pregunta = re.split(r',', pregunta.strip())
@@ -175,20 +176,20 @@ def elegir_categoria_dificultad(texto,opciones,categoria):
         print(f"3. {texto[2]}")
         if categoria:
             print("4. Aleatoria")
-        categoria=input()
-        match categoria:
+        parametro=input()
+        match parametro:
             case "1":
-                categoria = opciones[0]
+                parametro = opciones[0]
                 break
             case "2":
-                categoria = opciones[1]
+                parametro = opciones[1]
                 break
             case "3":
-                categoria = opciones[2]
+                parametro = opciones[2]
                 break
             case "4":
                 if categoria:
-                    categoria = random.choice([0, 15, 30])
+                    parametro = random.choice([0, 15, 30])
                     break
                 else:
                     print("Opción inválida. Intenta de nuevo.")
@@ -196,7 +197,7 @@ def elegir_categoria_dificultad(texto,opciones,categoria):
             case _:
                 print("Opción inválida. Intenta de nuevo.")
                 os.system('pause')
-    return categoria
+    return parametro
 
 def mostrar_categoria(categoria):
     retorno = ""
@@ -215,7 +216,7 @@ def mostrar_dificultad(dificultad):
         case 0:
             retorno = "Fácil"
         case 5:
-            retorno = "Medio"
+            retorno = "Normal"
         case 10:
             retorno = "Difícil"
     return retorno
@@ -266,10 +267,10 @@ def mostrar_correcta(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuest
 def mostrar_puntuacion():
     os.system('cls')
     jugador=0
-    a=""
-    print("Puntuaciones:")
     if len(puntuaciones) == 0:
         print("No hay puntuaciones guardadas.")
+    else:
+        print("Puntuaciones:")
     for puntuacion in puntuaciones:
         jugador+=1
         print(f"{jugador}- ", end="")
@@ -284,7 +285,7 @@ def mostrar_puntuacion():
 #=============================================================== JUEGO ===============================================================#
 
 def menu_juego():
-    retorno = False
+    salir = False
     categoria = 0
     dificultad = 0
     while True:
@@ -305,27 +306,27 @@ def menu_juego():
             case "3":
                 mostrar_puntuacion()
             case "4":
-                retorno = True
+                salir = True
                 break
             case _:
                 print("Opción inválida. Intenta de nuevo.")
                 os.system('pause')
-    return retorno,categoria,dificultad
+    return salir,categoria,dificultad
 
 def jugar_runer_preguntados():
     while True:
         salir,categoria,dificultad = menu_juego()
-        tiempo_barra, barra_largo = obtener_datos_barra(dificultad)
         if salir:
             os.system('cls')
             print("¡Hasta luego!")
             exit()
+        tiempo_barra, barra_largo = obtener_datos_barra(dificultad)
         
         ronda=0
         puntos=0
         seleccion = 1
-        
         elegidas = []
+        
         while True:
             if ronda>4:
                 os.system('cls')

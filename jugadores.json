@@ -1,0 +1,9 @@
+{
+    "nombre": "Jugador1",
+    "contraseña": "1234",
+    "aciertos": 8,
+    "errores": 2,
+    "total_preguntas": 10,
+    "tiempo_total": 52.6,
+    "partidas": 1
+}
