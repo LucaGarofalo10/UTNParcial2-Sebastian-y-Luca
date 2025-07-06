@@ -70,10 +70,6 @@ def elegir_categoria_dificultad(texto,opciones,categoria):
                 os.system('pause')
     return parametro
 
-
-
-
-
 #---------- Juego ----------# 
 def mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,respuesta_correcta,ronda,categoria,correcta):
     os.system('cls')  # limpiar pantalla en Windows
@@ -108,7 +104,7 @@ def mostrar_mensaje_resultado(seleccion, correcta):
     if seleccion == correcta:
         print("Opcion " + Fore.GREEN + "⋆*⋆*CORRECTA*⋆*⋆" + Style.RESET_ALL + " pasa a la siguiente pregunta")
     else:
-        print("Opcion " + Fore.RED + "INCORRECTA" + Style.RESET_ALL + " empieza de 0 :c")
+        print("Opcion " + Fore.RED + "INCORRECTA" + Style.RESET_ALL + " pero puede que tengas otra oportunidad")
     os.system('pause')
 
 def mostrar_puntuacion():
@@ -127,4 +123,33 @@ def mostrar_puntuacion():
             print(f"{puntuacion['nombre']}: ", end="")
         print(f"{puntuacion['puntos']} puntos   ", end="")
         print(f"{puntuacion['categoria']}-{puntuacion['dificultad']}")
+    os.system('pause')
+
+#---------mini juegos---------#
+def precentacion_ta_te_ti(tablero):
+    os.system('cls')
+    print("Parece que te has desviado del camino, pero si le ganas este ta-te-ti a un vagabundo te guiara de vuelta al camino\n")
+    mostrar_ta_te_ti(tablero)
+    print("\n\nSolo tienes que ingresar la casilla donde queres seleccionar, y luego el vagabundo eligira")
+    os.system('pause')
+
+def mostrar_ta_te_ti(tablero):
+    for i in range(0,len(tablero)):
+        for j in range(0,len(tablero[1])):
+            print(f" {tablero[i][j]}",end="")
+            if j<2:
+                print(" |",end="")
+        if i<2:
+            print("\n-----------")
+
+def resultado_ta_te_ti(tablero,marca):
+    os.system('cls')
+    mostrar_ta_te_ti(tablero)
+    match marca:
+        case "X":
+            print(f"\n\n{Fore.GREEN}Ganaste vos{Style.RESET_ALL}. Por lo que podras seguir jugando")
+        case "O":
+            print(f"\n\n{Fore.RED}Gano el vagabundo{Style.RESET_ALL}. Empieza de 0 :c")
+        case "":
+            print(f"\n\nEmpataste con el vagabundo. Vuelve a intentarlo")
     os.system('pause')
