@@ -12,7 +12,7 @@ from puntuaciones import *
 def tiempo_restante(inicio,tiempo_barra):
     transcurrido = time.time() - inicio
     restante = tiempo_barra - transcurrido
-    return restante
+    return restante, transcurrido
 
 def calcular_barra(inicio,barra_largo,tiempo_barra):
     restante = tiempo_restante(inicio,tiempo_barra)
@@ -89,12 +89,13 @@ def preguntas_y_respuestas(categoria,dificultad,elegidas):
     puntaje = pregunta_actual["puntaje"]
     return pregunta, respuestas, correcta, puntaje
 
-def obtener_datos_barra(dificultad):
+def obtener_configuracion(dificultad):
     with open("configuracion.json", "r", encoding="utf-8") as f:
         config = json.load(f)
     
     tiempo_barra = 0
     barra_largo = config["barra_largo"]
+    rondas = config["rondas"]
     
     match dificultad:
         case 0:
@@ -103,7 +104,7 @@ def obtener_datos_barra(dificultad):
             tiempo_barra = config["dificultad_normal"]
         case 10:
             tiempo_barra = config["dificultad_dificil"]
-    return tiempo_barra, barra_largo
+    return rondas, tiempo_barra, barra_largo
 
 def mostrar_categoria(categoria):
     retorno = ""

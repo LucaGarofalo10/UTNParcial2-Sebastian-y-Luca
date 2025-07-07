@@ -9,13 +9,15 @@ def menu_juego():
     salir = False
     categoria = 0
     dificultad = 0
+    perfil="ninguno"
     while True:
         os.system('cls')
         print("Bienvenido a Preguntados Runner")
         print("1. Empezar juego")
         print("2. Tutorial")
         print("3. Puntuaciones")
-        print("4. Salir")
+        print(f"4. Perfil ({perfil})")
+        print("5. Salir")
         opcion = input()
         match opcion:
             case "1":
@@ -27,6 +29,8 @@ def menu_juego():
             case "3":
                 mostrar_puntuacion()
             case "4":
+                menu_perfiles(perfil)
+            case "5":
                 salir = True
                 break
             case _:
@@ -34,7 +38,7 @@ def menu_juego():
                 os.system('pause')
     return salir,categoria,dificultad
 
-def mensaje_victoria(ronda, puntos, categoria, dificultad):
+def mensaje_victoria(puntos, categoria, dificultad):
     os.system('cls')
     print("FELICIDADES LLEGASTE A CASA\n")
     print(f"Tu puntaje final es: {puntos} puntos")
@@ -49,7 +53,7 @@ def jugar_runer_preguntados():
             os.system('cls')
             print("¡Hasta luego!")
             exit()
-        tiempo_barra, barra_largo = obtener_datos_barra(dificultad)
+        rondas, tiempo_barra, barra_largo = obtener_configuracion(dificultad)
         
         ronda=0
         puntos=0
@@ -58,10 +62,10 @@ def jugar_runer_preguntados():
         elegidas = []
         
         while True:
-            if ronda>4:
-                mensaje_victoria(ronda, puntos, categoria, dificultad)
+            if ronda>=rondas:
+                mensaje_victoria(puntos, categoria, dificultad)
                 break
-
+        
             pregunta,respuestas,correcta,puntos_pregunta = preguntas_y_respuestas(categoria,dificultad,elegidas)
             resultado = jugar_ronda(barra_largo,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda,categoria,intentos_mini)
             intentos_mini=resultado[2]
@@ -77,8 +81,7 @@ def jugar_runer_preguntados():
 def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, correcta, ronda, categoria, intentos_mini):
     inicio = time.time()
     segundo_anterior = int(time.time())
-    retorno = [False, 0, intentos_mini]
-
+    resultado=False
     while True:
         # Actualizar pantalla cada segundo
         if int(time.time()) != segundo_anterior:
@@ -89,7 +92,7 @@ def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, corr
         if finalizar(inicio,barra_largo,tiempo_barra):
             restante = 0
             if seleccion == correcta:
-                retorno[0] = True
+                resultado=True
             mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria,True)
             break
         
@@ -101,23 +104,21 @@ def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, corr
                 case 2:
                     seleccion = (seleccion + 1) % len(respuestas)
                 case 3:
-                    restante = tiempo_restante(inicio,tiempo_barra)
+                    restante, transcurrido = tiempo_restante(inicio,tiempo_barra)
                     mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria,True)
                     if seleccion == correcta:
-                        retorno[0] = True
+                        resultado=True
                     else:
                         if intentos_mini > 0:
-                            retorno[2]-=1
                             if not mini_juegos():
                                 break
-                            retorno[0] = True
+                            resultado=True
                             print(f"\nTe quedan {intentos_mini-1} intentos de mini juego.")
                             os.system('pause')
                     break
             mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,None,ronda,categoria,False)
 
-    retorno[1] = restante
-    return retorno
+    return resultado, restante, intentos_mini, transcurrido
 
 #----------Mini juegos----------#
 def mini_juegos():
