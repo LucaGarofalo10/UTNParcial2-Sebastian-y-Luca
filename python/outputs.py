@@ -154,3 +154,47 @@ def resultado_ta_te_ti(tablero,marca):
         case "":
             print(f"\n\nEmpataste con el vagabundo. Vuelve a intentarlo")
     os.system('pause')
+
+#----------Perfiles----------#
+def mostrar_menu_perfiles(perfil):
+    os.system('cls')
+    if perfil != "ninguno":
+        print(f"Hola {perfil} ¿que queres hacer?\n")
+    else:
+        print(f"Bienvenido ¿quieres crearte una cuenta o seleccionar una?\n")
+    print("1. Informacion")
+    if perfil != "ninguno":
+        print("2. Cambiar cuenta")
+    else:
+        print("2. Seleccionar cuenta")
+    print("3. Crear cuenta")
+    print("4. Salir")
+
+def ver_informacion(perfil):
+    jugador, porcentaje_aciertos, porcentaje_errores, tiempo_promedio = obtener_informacion_jugador(perfil)
+    os.system('cls')
+    print("\n|------------Datos del jugador------------|")
+    print(f"Nombre: {jugador['nombre']}")
+    print(f"Porcentaje de aciertos: {porcentaje_aciertos:.2f}%")
+    print(f"Porcentaje de errores: {porcentaje_errores:.2f}%")
+    print(f"Tiempo promedio: {tiempo_promedio:.2f}s")
+    print("\n|--------------Mejor partida--------------|")
+    print(f"Puntos: {jugador['mejor_puntos']}")
+    print(f"Tiempo: {jugador['mejor_tiempo']}s")
+    print(f"Dificultad: {jugador['mejor_dificultad']}")
+    print(f"Categoría: {jugador['mejor_categoria']}")
+    os.system('pause')
+
+def mostrar_jugadores(jugadores):
+    for i, jugador in enumerate(jugadores, 1):
+        print(f"{i}. {jugador['nombre']}")
+
+def mensaje_ingreso(nombre):
+    os.system('cls')
+    print(f"Bienvenido {nombre}")
+    os.system('pause')
+
+
+
+
+

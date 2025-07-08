@@ -1,5 +1,6 @@
 {
     "rondas": 5,
+    "intentos_mini": 2,
     "barra_largo": 40,
     "dificultad_facil": 14,
     "dificultad_normal": 10,

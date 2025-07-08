@@ -1,0 +1,86 @@
+[
+    {
+        "nombre": "Jugador1",
+        "contraseña": "Jugador1",
+        "aciertos": 8,
+        "errores": 2,
+        "tiempo_total": 52.6,
+        "partidas": 1,
+        "mejor_puntos": 2,
+        "mejor_tiempo": 52.6,
+        "mejor_dificultad": "Difícil",
+        "mejor_categoria": "Entretenimiento"
+    },
+    {
+        "nombre": "Jugador2",
+        "contraseña": "Jugador2",
+        "aciertos": 8,
+        "errores": 2,
+        "tiempo_total": 52.6,
+        "partidas": 1,
+        "mejor_puntos": 2,
+        "mejor_tiempo": 52.6,
+        "mejor_dificultad": "Difícil",
+        "mejor_categoria": "Entretenimiento"
+    },
+    {
+        "nombre": "Jugador3",
+        "contraseña": "",
+        "aciertos": 8,
+        "errores": 2,
+        "tiempo_total": 52.6,
+        "partidas": 1,
+        "mejor_puntos": 2,
+        "mejor_tiempo": 52.6,
+        "mejor_dificultad": "Difícil",
+        "mejor_categoria": "Entretenimiento"
+    },
+    {
+        "nombre": "seba",
+        "contraseña": "seba",
+        "aciertos": 0,
+        "errores": 0,
+        "tiempo_total": 0.0,
+        "partidas": 0,
+        "mejor_puntos": 0,
+        "mejor_tiempo": 0.0,
+        "mejor_dificultad": "",
+        "mejor_categoria": ""
+    },
+    {
+        "nombre": "luca",
+        "contraseña": "luca",
+        "aciertos": 0,
+        "errores": 0,
+        "tiempo_total": 0.0,
+        "partidas": 0,
+        "mejor_puntos": 0,
+        "mejor_tiempo": 0.0,
+        "mejor_dificultad": "",
+        "mejor_categoria": ""
+    },
+    {
+        "nombre": "ale",
+        "contraseña": "ale",
+        "aciertos": 0,
+        "errores": 0,
+        "tiempo_total": 0.0,
+        "partidas": 0,
+        "mejor_puntos": 0,
+        "mejor_tiempo": 0.0,
+        "mejor_dificultad": "",
+        "mejor_categoria": ""
+    },
+    {
+        "nombre": "gonza",
+        "contraseña": "gonza",
+        "aciertos": 0,
+        "errores": 0,
+        "tiempo_total": 0.0,
+        "partidas": 0,
+        "mejor_puntos": 0,
+        "mejor_tiempo": 0.0,
+        "mejor_dificultad": "",
+        "mejor_categoria": ""
+    }
+]
