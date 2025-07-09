@@ -108,22 +108,47 @@ def mostrar_mensaje_resultado(seleccion, correcta):
         print("Opcion " + Fore.RED + "INCORRECTA" + Style.RESET_ALL + " pero puede que tengas otra oportunidad")
     os.system('pause')
 
-def mostrar_puntuacion():
+def mayor_mejor_puntos(jugador1,jugador2):
+    retorno =False
+    if jugador1['mejor_puntos'] < jugador2['mejor_puntos']:
+        retorno = True
+    return retorno
+
+def ordenar_lista_burbujeo(lista,comprobacion):
+    for i in range(0,len(lista)):
+        for j in range(i+1,len(lista)):
+            if comprobacion(lista[i],lista[j]):
+                aux=lista[j]
+                lista[j]=lista[i]
+                lista[i]=aux
+    return lista
+
+def mostrar_top():
+    TOP=ordenar_lista_burbujeo(obtener_top(),mayor_mejor_puntos)
+    a=""
     os.system('cls')
-    jugador=0
-    if len(puntuaciones) == 0:
-        print("No hay puntuaciones guardadas.")
+    if len(TOP) != 0:
+        print("TOP Puntuaciones:\n")
+        posicion=0
+        for jugador in TOP:
+            posicion+=1
+            print(f"{posicion}.")
+            print(f"   {jugador['nombre']:<10}{jugador['mejor_puntos']:>6}\n")
+            
     else:
-        print("Puntuaciones:")
-    for puntuacion in puntuaciones:
-        jugador+=1
-        print(f"{jugador}- ", end="")
-        if puntuacion["nombre"] == "":
-            print(f"?????: ", end="")
-        else:
-            print(f"{puntuacion['nombre']}: ", end="")
-        print(f"{puntuacion['puntos']} puntos   ", end="")
-        print(f"{puntuacion['categoria']}-{puntuacion['dificultad']}")
+        print("No hay puntuaciones guardadas.")
+    
+    os.system('pause')
+
+def mensaje_victoria(puntos, categoria, dificultad, aciertos, rondas, tiempo_promedio):
+    os.system('cls')
+    print("#-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-#")
+    print("FELICIDADES LLEGASTE A CASA\n")
+    print(f"Tu puntaje final es: {puntos} puntos")
+    print(f"Preguntas acertadas: {aciertos}/{rondas}")
+    print(f"Tiempo promedio por pregunta: {tiempo_promedio:.2f} segundos")
+    print(f"\nCategoria: {categoria}  |  Dificultad: {dificultad}")
+    print("#-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-#\n")
     os.system('pause')
 
 #---------mini juegos---------#
@@ -171,18 +196,21 @@ def mostrar_menu_perfiles(perfil):
     print("4. Salir")
 
 def ver_informacion(perfil):
-    jugador, porcentaje_aciertos, porcentaje_errores, tiempo_promedio = obtener_informacion_jugador(perfil)
     os.system('cls')
-    print("\n|------------Datos del jugador------------|")
-    print(f"Nombre: {jugador['nombre']}")
-    print(f"Porcentaje de aciertos: {porcentaje_aciertos:.2f}%")
-    print(f"Porcentaje de errores: {porcentaje_errores:.2f}%")
-    print(f"Tiempo promedio: {tiempo_promedio:.2f}s")
-    print("\n|--------------Mejor partida--------------|")
-    print(f"Puntos: {jugador['mejor_puntos']}")
-    print(f"Tiempo: {jugador['mejor_tiempo']}s")
-    print(f"Dificultad: {jugador['mejor_dificultad']}")
-    print(f"Categoría: {jugador['mejor_categoria']}")
+    if perfil=="ninguno":
+        print("Parece ser que no estas en un perfi\ncrea o ingresa en uno para ver su informacion ;)\n")
+    else:
+        jugador, porcentaje_aciertos, porcentaje_errores, tiempo_promedio = obtener_informacion_jugador(perfil)
+        print("\n|------------Datos del jugador------------|")
+        print(f"Nombre: {jugador['nombre']}")
+        print(f"Porcentaje de aciertos: {porcentaje_aciertos:.2f}%")
+        print(f"Porcentaje de errores: {porcentaje_errores:.2f}%")
+        print(f"Tiempo promedio: {tiempo_promedio:.2f}s")
+        print("\n|--------------Mejor partida--------------|")
+        print(f"Puntos: {jugador['mejor_puntos']}")
+        print(f"Tiempo: {jugador['mejor_tiempo']}s")
+        print(f"Dificultad: {jugador['mejor_dificultad']}")
+        print(f"Categoría: {jugador['mejor_categoria']}")
     os.system('pause')
 
 def mostrar_jugadores(jugadores):

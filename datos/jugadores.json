@@ -26,14 +26,14 @@
     {
         "nombre": "Jugador3",
         "contraseña": "",
-        "aciertos": 8,
+        "aciertos": 13,
         "errores": 2,
-        "tiempo_total": 52.6,
-        "partidas": 1,
-        "mejor_puntos": 2,
-        "mejor_tiempo": 52.6,
-        "mejor_dificultad": "Difícil",
-        "mejor_categoria": "Entretenimiento"
+        "tiempo_total": 54.492951726913454,
+        "partidas": 2,
+        "mejor_puntos": 3654,
+        "mejor_tiempo": 1.8929517269134521,
+        "mejor_dificultad": 0,
+        "mejor_categoria": 0
     },
     {
         "nombre": "seba",
@@ -74,6 +74,18 @@
     {
         "nombre": "gonza",
         "contraseña": "gonza",
+        "aciertos": 0,
+        "errores": 0,
+        "tiempo_total": 0.0,
+        "partidas": 0,
+        "mejor_puntos": 0,
+        "mejor_tiempo": 0.0,
+        "mejor_dificultad": "",
+        "mejor_categoria": ""
+    },
+    {
+        "nombre": "exit",
+        "contraseña": "exit",
         "aciertos": 0,
         "errores": 0,
         "tiempo_total": 0.0,

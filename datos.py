@@ -20,16 +20,16 @@ def calcular_barra(inicio,barra_largo,tiempo_barra):
     largo = int((restante / tiempo_barra) * barra_largo)
     return largo
 
-def sumar_puntos(puntos_pregunta,resultado,dificultad):
+def sumar_puntos(puntos_pregunta,restante,dificultad):
     match dificultad:
         case 0:
-            puntos = int(50 + resultado[1] * puntos_pregunta)
+            puntos = int(50 + restante * puntos_pregunta)
         case 5:
-            puntos = int(100 + resultado[1] * puntos_pregunta)
+            puntos = int(100 + restante * puntos_pregunta)
         case 10:
-            puntos = int(150 + resultado[1] * puntos_pregunta)
+            puntos = int(150 + restante * puntos_pregunta)
     return puntos
-
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def posicion_puntuacion(puntos):
     retorno = len(puntuaciones)
     for i, puntuacion in enumerate(puntuaciones):
@@ -37,7 +37,7 @@ def posicion_puntuacion(puntos):
             retorno = i
             break
     return retorno
-
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 def verificar_correcta(i,seleccion, correcta):
     if i == correcta:
         color = Fore.GREEN
@@ -132,17 +132,6 @@ def mostrar_dificultad(dificultad):
             retorno = "Difícil"
     return retorno
 
-def guardar_puntuacion(nombre, puntos, categoria, dificultad):
-    puntuacion = {}
-    puntuacion["nombre"] = nombre
-    puntuacion["puntos"] = puntos
-    puntuacion["categoria"] = mostrar_categoria(categoria)
-    puntuacion["dificultad"] = mostrar_dificultad(dificultad)
-
-    posicion=posicion_puntuacion(puntos)
-    puntuaciones.insert(posicion,puntuacion)
-    return puntuaciones
-
 #--------- Deteccion ----------#
 
 def finalizar(inicio,barra_largo,tiempo_barra):
@@ -232,7 +221,7 @@ def agregar_usuario():
     jugadores=obtener_jugadores()
     while True:
         os.system('cls')
-        nombre = input("Ingrese el nombre de la cuenta:\n")
+        nombre = input("Ingrese el nombre de la cuenta (no ingrese nada para cancelar):\n")
         #comprobamos si existe el jugador
         jugador, encontrado = obtener_jugador(jugadores, nombre)
         
@@ -294,6 +283,39 @@ def obtener_informacion_jugador(nombre):
     else:
         tiempo_promedio = 0
     return jugador, porcentaje_aciertos, porcentaje_errores, tiempo_promedio
+
+def cambiar_datos_jugador(jugadores,nombre,puntos,aciertos,rondas,tiempo_partida,categoria,dificultad):
+    for jugador in jugadores:
+        if jugador['nombre'] == nombre:
+            jugador['aciertos']+=aciertos
+            jugador['errores']+=rondas-aciertos
+            jugador['tiempo_total']+=tiempo_partida
+            jugador['partidas']+=1
+            if jugador['mejor_puntos']<puntos:
+                jugador['mejor_puntos']=puntos
+                jugador['mejor_tiempo']=tiempo_partida
+                jugador['mejor_dificultad']=dificultad
+                jugador['mejor_categoria']=categoria
+            break
+    return jugadores
+
+def guardar_datos(puntos,aciertos,rondas,tiempo_partida,nombre,categoria,dificultad):
+    jugadores=obtener_jugadores()
+    jugadores=cambiar_datos_jugador(jugadores,nombre,puntos,aciertos,rondas,tiempo_partida,categoria,dificultad)
+    cargar_jugadores(jugadores)
+
+def obtener_top():
+    jugadores=obtener_jugadores()
+    mejores=[]
+    
+    for jugador in jugadores:
+        mejores_jugador={
+            "nombre": jugador['nombre'],
+            "mejor_puntos": jugador['mejor_puntos']
+        }
+        mejores.append(mejores_jugador)
+    return mejores
+
 
 
 

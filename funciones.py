@@ -2,22 +2,20 @@ import os
 import msvcrt
 import time
 from outputs import *
-from datos import *
 #from datos import finalizar, guardar_puntuacion, obtener_configuracion, sumar_puntos, preguntas_y_respuestas, tiempo_restante, detectar_tecla, verificar_victoria, obtener_posicion, obtener_jugadores, sin_contraseña, cargar_jugadores, agregar_usuario, validar_ta_te_ti, calcular_fila_columna, obtener_jugador
 import random
 
 #============================================================ JUEGO ============================================================#
-def menu_juego():
+def menu_juego(perfil):
     salir = False
     categoria = 0
     dificultad = 0
-    perfil="ninguno"
     while True:
         os.system('cls')
         print("Bienvenido a Preguntados Runner")
         print("1. Empezar juego")
         print("2. Tutorial")
-        print("3. Puntuaciones")
+        print("3. Top puntuaciones")
         print(f"4. Perfil ({perfil})")
         print("5. Salir")
         opcion = input()
@@ -29,9 +27,9 @@ def menu_juego():
             case "2":
                 tutorial()
             case "3":
-                mostrar_puntuacion()
+                mostrar_top()
             case "4":
-                menu_perfiles(perfil)
+                perfil=menu_perfiles(perfil)
                 pass
             case "5":
                 salir = True
@@ -39,19 +37,29 @@ def menu_juego():
             case _:
                 print("Opción inválida. Intenta de nuevo.")
                 os.system('pause')
-    return salir,categoria,dificultad
+    return salir,categoria,dificultad,perfil
 
-def mensaje_victoria(puntos, categoria, dificultad):
-    os.system('cls')
-    print("FELICIDADES LLEGASTE A CASA\n")
-    print(f"Tu puntaje final es: {puntos} puntos")
-    os.system('pause')
-    nombre = input("\nIngresa un nombre para guardar tu puntaje: ")
-    guardar_puntuacion(nombre, puntos, categoria, dificultad)
+def comprobar_victoria(puntos, categoria, dificultad, aciertos, rondas, ronda, tiempo_partida, perfil):
+    victoria=False
+    
+    if ronda>=rondas:
+        mensaje_victoria(puntos, categoria, dificultad, aciertos, rondas, tiempo_partida/aciertos)
+        victoria=True
+        perfil=comprobar_sin_perfil(perfil)
+        
+        if perfil!="ninguno":
+            guardar_datos(puntos,aciertos,rondas,tiempo_partida,perfil,categoria,dificultad)
+            os.system('cls')
+            print("¡¡¡Datos guardado!!!")
+            print("Accede a perfiles para verlos reflejados")
+            os.system('pause')
+    
+    return victoria, perfil
 
 def jugar_runer_preguntados():
+    perfil="ninguno"
     while True:
-        salir,categoria,dificultad = menu_juego()
+        salir,categoria,dificultad,perfil = menu_juego(perfil)
         if salir:
             os.system('cls')
             print("¡Hasta luego!")
@@ -60,27 +68,32 @@ def jugar_runer_preguntados():
         
         ronda=0
         puntos=0
+        aciertos=0
+        tiempo_partida=0
         seleccion = 1
         elegidas = []
         
         while True:
-            if ronda>=rondas:
-                mensaje_victoria(puntos, categoria, dificultad)
+            #Comprobamos si gano
+            victoria, perfil = comprobar_victoria(puntos, categoria, dificultad, aciertos, rondas, ronda, tiempo_partida, perfil)
+            if victoria:
                 break
-        
-            pregunta,respuestas,correcta,puntos_pregunta = preguntas_y_respuestas(categoria,dificultad,elegidas)
-            resultado = jugar_ronda(barra_largo,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda,categoria,intentos_mini)
-            intentos_mini=resultado[2]
             
-            if resultado[0]:
+            pregunta,respuestas,correcta,puntos_pregunta = preguntas_y_respuestas(categoria,dificultad,elegidas)
+            resultado, restante, intentos_mini, transcurrido, aciertos = jugar_ronda(barra_largo,tiempo_barra,seleccion,pregunta,respuestas,correcta,ronda,categoria,intentos_mini,aciertos)
+            #intentos_mini=resultado[2]
+            
+            if resultado:
                 ronda+=1
-                puntos += sumar_puntos(puntos_pregunta, resultado, dificultad)
+                tiempo_partida+=transcurrido
+                puntos += sumar_puntos(puntos_pregunta, restante, dificultad)
             else:
+                os.system('cls')
                 print("Te quedaste sin oportunidades de mini juego, empieza de 0 :c")
                 os.system('pause')
                 break
 
-def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, correcta, ronda, categoria, intentos_mini):
+def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, correcta, ronda, categoria, intentos_mini, aciertos):
     inicio = time.time()
     segundo_anterior = int(time.time())
     resultado=False
@@ -96,6 +109,7 @@ def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, corr
             transcurrido=tiempo_barra
             mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria,True)
             if seleccion == correcta:
+                aciertos+=1
                 resultado=True
             else:
                 if intentos_mini > 0:
@@ -118,6 +132,7 @@ def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, corr
                     restante, transcurrido = tiempo_restante(inicio,tiempo_barra)
                     mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria,True)
                     if seleccion == correcta:
+                        aciertos+=1
                         resultado=True
                     else:
                         if intentos_mini > 0:
@@ -130,7 +145,7 @@ def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, corr
                     break
             mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,None,ronda,categoria,False)
 
-    return resultado, restante, intentos_mini, transcurrido
+    return resultado, restante, intentos_mini, transcurrido, aciertos
 
 #----------Mini juego----------#
 def mini_juego():
@@ -208,7 +223,7 @@ def menu_perfiles(perfil):
             case "2":
                 perfil = cambiar_cuenta(perfil)
             case "3":
-                perfil = crear_cuenta()
+                perfil = crear_cuenta(perfil)
             case "4":
                 break
             case _:
@@ -281,9 +296,30 @@ def ingresar_nombre(jugadores):
     nombre=input("\nIngrese el nombre de la cuenta:\n")
     return nombre
 
-def crear_cuenta():
-    jugadores,nuevo_jugador= agregar_usuario()
+def crear_cuenta(perfil):
+    jugadores,nuevo_jugador = agregar_usuario()
+    if nuevo_jugador['nombre']=="":
+        return perfil
     cargar_jugadores(jugadores)
     return nuevo_jugador['nombre']
+
+def comprobar_sin_perfil(perfil):
+    while True:
+        os.system('cls')
+        if perfil=="ninguno":
+            print("Al parecer no tienes un perfil ¿que quieres hacer entonces?\n")
+            print("1. Crear o ingresar en un perfil")
+            print("2. Salir (se perdera tu puntuacion)")
+            opcion=input("\n")
+            match opcion:
+                case "1":
+                    perfil=menu_perfiles(perfil)
+                    break
+                case "2":
+                    break
+                case _:
+                    print("Opción inválida. Intenta de nuevo.")
+                    os.system('pause')
+    return perfil
 
 jugar_runer_preguntados()
