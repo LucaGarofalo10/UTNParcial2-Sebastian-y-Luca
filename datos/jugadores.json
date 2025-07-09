@@ -38,14 +38,14 @@
     {
         "nombre": "seba",
         "contraseña": "seba",
-        "aciertos": 0,
+        "aciertos": 5,
         "errores": 0,
-        "tiempo_total": 0.0,
-        "partidas": 0,
-        "mejor_puntos": 0,
-        "mejor_tiempo": 0.0,
-        "mejor_dificultad": "",
-        "mejor_categoria": ""
+        "tiempo_total": 2.1394386291503906,
+        "partidas": 1,
+        "mejor_puntos": 6427,
+        "mejor_tiempo": 2.1394386291503906,
+        "mejor_dificultad": 10,
+        "mejor_categoria": 15
     },
     {
         "nombre": "luca",
@@ -74,14 +74,14 @@
     {
         "nombre": "gonza",
         "contraseña": "gonza",
-        "aciertos": 0,
+        "aciertos": 5,
         "errores": 0,
-        "tiempo_total": 0.0,
-        "partidas": 0,
-        "mejor_puntos": 0,
-        "mejor_tiempo": 0.0,
-        "mejor_dificultad": "",
-        "mejor_categoria": ""
+        "tiempo_total": 5.901628494262695,
+        "partidas": 1,
+        "mejor_puntos": 3451,
+        "mejor_tiempo": 5.901628494262695,
+        "mejor_dificultad": 0,
+        "mejor_categoria": 0
     },
     {
         "nombre": "exit",

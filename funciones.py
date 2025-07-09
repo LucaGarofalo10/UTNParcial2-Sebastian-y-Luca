@@ -1,11 +1,9 @@
 import os
-import msvcrt
 import time
 from outputs import *
-#from datos import finalizar, guardar_puntuacion, obtener_configuracion, sumar_puntos, preguntas_y_respuestas, tiempo_restante, detectar_tecla, verificar_victoria, obtener_posicion, obtener_jugadores, sin_contraseña, cargar_jugadores, agregar_usuario, validar_ta_te_ti, calcular_fila_columna, obtener_jugador
-import random
+from acciones import *
 
-#============================================================ JUEGO ============================================================#
+#============================================================ MENU ============================================================#
 def menu_juego(perfil):
     salir = False
     categoria = 0
@@ -21,8 +19,8 @@ def menu_juego(perfil):
         opcion = input()
         match opcion:
             case "1":
-                categoria=elegir_categoria_dificultad(["Ciencia","Historia","Entretenimiento"],[0, 15, 30],True)
-                dificultad=elegir_categoria_dificultad(["Fácil","Media","Difícil"],[0, 5, 10],False)
+                categoria=elegir_categoria_dificultad(["Ciencia","Historia","Entretenimiento"],[0, 15, 30],"categoria")
+                dificultad=elegir_categoria_dificultad(["Fácil","Media","Difícil"],[0, 5, 10],"dificultad")
                 break
             case "2":
                 tutorial()
@@ -39,25 +37,10 @@ def menu_juego(perfil):
                 os.system('pause')
     return salir,categoria,dificultad,perfil
 
-def comprobar_victoria(puntos, categoria, dificultad, aciertos, rondas, ronda, tiempo_partida, perfil):
-    victoria=False
-    
-    if ronda>=rondas:
-        mensaje_victoria(puntos, categoria, dificultad, aciertos, rondas, tiempo_partida/aciertos)
-        victoria=True
-        perfil=comprobar_sin_perfil(perfil)
-        
-        if perfil!="ninguno":
-            guardar_datos(puntos,aciertos,rondas,tiempo_partida,perfil,categoria,dificultad)
-            os.system('cls')
-            print("¡¡¡Datos guardado!!!")
-            print("Accede a perfiles para verlos reflejados")
-            os.system('pause')
-    
-    return victoria, perfil
-
+#============================================================ JUEGO ============================================================#
 def jugar_runer_preguntados():
     perfil="ninguno"
+    
     while True:
         salir,categoria,dificultad,perfil = menu_juego(perfil)
         if salir:
@@ -71,7 +54,7 @@ def jugar_runer_preguntados():
         aciertos=0
         tiempo_partida=0
         seleccion = 1
-        elegidas = []
+        elegidas = set()
         
         while True:
             #Comprobamos si gano
@@ -97,61 +80,108 @@ def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, corr
     inicio = time.time()
     segundo_anterior = int(time.time())
     resultado=False
+    sin_tiempo=False
+    
+    mostrar_juego(seleccion,False,inicio,barra_largo,tiempo_barra,pregunta,respuestas,None,ronda,categoria)
     while True:
         # Actualizar pantalla cada segundo
         if int(time.time()) != segundo_anterior:
             segundo_anterior = int(time.time())
-            mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,None,ronda,categoria,False)
+            mostrar_juego(seleccion,False,inicio,barra_largo,tiempo_barra,pregunta,respuestas,None,ronda,categoria)
 
         # Finalizar cuando se acaba el tiempo
         if finalizar(inicio,barra_largo,tiempo_barra):
-            restante = 0
-            transcurrido=tiempo_barra
-            mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria,True)
-            if seleccion == correcta:
-                aciertos+=1
-                resultado=True
-            else:
-                if intentos_mini > 0:
-                    if not mini_juego():
-                        break
-                    resultado=True
-                    intentos_mini-=1
-                    print(f"\nTe quedan {intentos_mini} intentos de mini juego.")
-                    os.system('pause')
+            mostrar_juego(seleccion,True,inicio,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria)
+            resultado,intentos_mini,aciertos=seleccionar_respuesta(seleccion,correcta,intentos_mini,aciertos)
+            sin_tiempo=True
             break
         
         # Cambiar opcion
-        if msvcrt.kbhit():
-            match detectar_tecla():
-                case 1:
-                    seleccion = (seleccion - 1) % len(respuestas)
-                case 2:
-                    seleccion = (seleccion + 1) % len(respuestas)
-                case 3:
-                    restante, transcurrido = tiempo_restante(inicio,tiempo_barra)
-                    mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria,True)
-                    if seleccion == correcta:
-                        aciertos+=1
-                        resultado=True
-                    else:
-                        if intentos_mini > 0:
-                            if not mini_juego():
-                                break
-                            resultado=True
-                            intentos_mini-=1
-                            print(f"\nTe quedan {intentos_mini} intentos de mini juego.")
-                            os.system('pause')
-                    break
-            mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,None,ronda,categoria,False)
-
+        resultado,terminar,seleccion,intentos_mini,aciertos=detectar_tecla(seleccion,respuestas,False,(seleccion,correcta,intentos_mini,aciertos),mostrar_juego,(inicio,barra_largo,tiempo_barra,pregunta,respuestas,correcta,ronda,categoria))
+        if terminar:
+            break
+    
+    restante, transcurrido = tiempo_restante(inicio,tiempo_barra,sin_tiempo)
     return resultado, restante, intentos_mini, transcurrido, aciertos
+
+def detectar_tecla(seleccion,respuestas,tutorial,parametros_seleccionar,funcion_mostrar,parametros_mostrar):
+    terminar=False
+    resultado=False
+    intentos_mini=parametros_seleccionar[2]
+    aciertos=parametros_seleccionar[3]
+    
+    if msvcrt.kbhit():
+        match definir_tecla():
+            case 1:
+                seleccion = (seleccion - 1) % len(respuestas)
+            case 2:
+                seleccion = (seleccion + 1) % len(respuestas)
+            case 3:
+                terminar=True
+                if not tutorial:
+                    funcion_mostrar(seleccion,True,*parametros_mostrar)
+                    resultado,intentos_mini,aciertos=seleccionar_respuesta(*parametros_seleccionar)
+        funcion_mostrar(seleccion,False,*parametros_mostrar,)
+    
+    return resultado,terminar,seleccion,intentos_mini,aciertos
+
+def seleccionar_respuesta(seleccion,correcta,intentos_mini,aciertos):
+    if seleccion == correcta:
+        aciertos+=1
+        resultado=True
+    else:
+        if intentos_mini > 0:
+            if mini_juego():
+                resultado=True
+                intentos_mini-=1
+                print(f"\nTe quedan {intentos_mini} intentos de mini juego.")
+                os.system('pause')
+            else:   
+                resultado=False
+        else:
+            resultado=False
+    return resultado,intentos_mini,aciertos
+
+#============================================================ TUTORIAL ============================================================#
+def tutorial():
+    segundo_anterior = int(time.time())
+    seleccion = 1
+    respuestas = ["Estas seran las respuestas","Puedes elegirla con → pero si se acaba el tiempo","Se elige la que estes seleccionando"]
+    while True:
+        # Actualizar pantalla cada segundo
+        if int(time.time()) != segundo_anterior:
+            segundo_anterior = int(time.time())
+            mostrar_tutorial(seleccion,respuestas)
+        
+        # Cambiar opcion
+        a,terminar,seleccion,b,c=detectar_tecla(seleccion,respuestas,True,(None),mostrar_tutorial,(seleccion,respuestas))
+        if terminar:
+            break
+
+#============================================================ PERFILES ============================================================#
+def menu_perfiles(perfil):
+    while True:
+        mostrar_menu_perfiles(perfil)
+        opcion = input()
+        match opcion:
+            case "1":
+                ver_informacion(perfil)
+            case "2":
+                perfil = cambiar_cuenta(perfil)
+            case "3":
+                perfil = crear_cuenta(perfil)
+            case "4":
+                break
+            case _:
+                print("Opción inválida. Intenta de nuevo.")
+                os.system('pause')
+    return perfil
 
 #----------Mini juego----------#
 def mini_juego():
     resultado = None
     while resultado == None:
-        resultado = ta_te_ti() 
+        resultado = ta_te_ti()
     return resultado
 
 def ta_te_ti():
@@ -182,144 +212,5 @@ def ta_te_ti():
             break
         
     return ganador
-
-def turno_jugador(tablero):
-    mensaje=""
-    while mensaje!="ok":
-        os.system('cls')
-        mostrar_ta_te_ti(tablero)
-        seleccion=obtener_posicion()
-        
-        fila,columna=calcular_fila_columna(seleccion)
-        
-        mensaje=validar_ta_te_ti(seleccion,fila,columna,tablero) 
-        if mensaje == "ok":
-            tablero[fila][columna]="X"
-        else:
-            print(mensaje)
-            os.system('pause')
-    return tablero
-
-def turno_maquina(tablero):
-    mensaje=""
-    while mensaje!="ok":
-        seleccion=random.randint(1,9)
-        
-        fila,columna=calcular_fila_columna(seleccion)
-        
-        mensaje=validar_ta_te_ti(seleccion,fila,columna,tablero) 
-        if mensaje == "ok":
-            tablero[fila][columna]="O"
-    return tablero
-
-#----------Perfiles----------#
-def menu_perfiles(perfil):
-    while True:
-        mostrar_menu_perfiles(perfil)
-        opcion = input()
-        match opcion:
-            case "1":
-                ver_informacion(perfil)
-            case "2":
-                perfil = cambiar_cuenta(perfil)
-            case "3":
-                perfil = crear_cuenta(perfil)
-            case "4":
-                break
-            case _:
-                print("Opción inválida. Intenta de nuevo.")
-                os.system('pause')
-    return perfil
-
-def cambiar_cuenta(perfil):
-    while True:
-        jugadores = obtener_jugadores()
-        nombre=ingresar_nombre(jugadores)
-        
-        #reiniciar si eligui la cuenta en la que esta
-        if nombre==perfil:
-            os.system('cls')
-            print("Ya estas en esta cuenta")
-            os.system('pause')
-            continue
-        
-        #salir si pone exit
-        if nombre=="exit":
-            break
-        
-        #verificar si la cuenta existe
-        jugador,encontrado = obtener_jugador(jugadores, nombre)
-        if encontrado:
-            #verificar si la contraseña coincide
-            if ingresar_contraseña(jugador):
-                perfil=nombre
-            break
-        else:
-            print("Cuenta no encontrada, intente otra ves")
-            os.system('pause')
-    return perfil
-
-def ingresar_contraseña(jugador):
-    retorno = False
-    #ingresar directamente si no tiene contraseña
-    if sin_contraseña(jugador):
-        mensaje_ingreso(jugador['nombre'])
-        retorno = True
-    else:
-        while True:
-            os.system('cls')
-            print("Ingrese la contraseña")
-            print("'exit' para cancelar")
-            contraseña = input("\n")
-            
-            #salir si pone exit
-            if contraseña=="exit":
-                retorno = True
-                break
-            
-            #comprobar si la contraseña coincide y volver a pedirla si no coincide
-            if jugador["contraseña"]==contraseña:
-                retorno = True
-                mensaje_ingreso(jugador['nombre'])
-                break
-            else:
-                os.system('cls')
-                print("Contraseña incorrecta")
-                os.system('pause')
-    return retorno
-
-def ingresar_nombre(jugadores):
-    os.system('cls')
-    print("¿A que cuenta queres cambiar?\n")
-    mostrar_jugadores(jugadores)
-    print("'exit' para cancelar")
-    nombre=input("\nIngrese el nombre de la cuenta:\n")
-    return nombre
-
-def crear_cuenta(perfil):
-    jugadores,nuevo_jugador = agregar_usuario()
-    if nuevo_jugador['nombre']=="":
-        return perfil
-    cargar_jugadores(jugadores)
-    return nuevo_jugador['nombre']
-
-def comprobar_sin_perfil(perfil):
-    while True:
-        os.system('cls')
-        if perfil=="ninguno":
-            print("Al parecer no tienes un perfil ¿que quieres hacer entonces?\n")
-            print("1. Crear o ingresar en un perfil")
-            print("2. Salir (se perdera tu puntuacion)")
-            opcion=input("\n")
-            match opcion:
-                case "1":
-                    perfil=menu_perfiles(perfil)
-                    break
-                case "2":
-                    break
-                case _:
-                    print("Opción inválida. Intenta de nuevo.")
-                    os.system('pause')
-    return perfil
 
 jugar_runer_preguntados()

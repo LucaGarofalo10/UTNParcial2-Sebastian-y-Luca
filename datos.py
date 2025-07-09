@@ -5,18 +5,19 @@ import re
 import json
 import os
 from colorama import init, Fore, Style
-from puntuaciones import *
-
 
 #========================================================== CALCULAR ===========================================================#
 
-def tiempo_restante(inicio,tiempo_barra):
+def tiempo_restante(inicio,tiempo_barra,sin_tiempo):
     transcurrido = time.time() - inicio
     restante = tiempo_barra - transcurrido
+    if sin_tiempo:
+        restante=0
+        transcurrido=tiempo_barra
     return restante, transcurrido
 
 def calcular_barra(inicio,barra_largo,tiempo_barra):
-    restante, transcurrido = tiempo_restante(inicio,tiempo_barra)
+    restante, transcurrido = tiempo_restante(inicio,tiempo_barra,False)
     largo = int((restante / tiempo_barra) * barra_largo)
     return largo
 
@@ -29,15 +30,7 @@ def sumar_puntos(puntos_pregunta,restante,dificultad):
         case 10:
             puntos = int(150 + restante * puntos_pregunta)
     return puntos
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def posicion_puntuacion(puntos):
-    retorno = len(puntuaciones)
-    for i, puntuacion in enumerate(puntuaciones):
-        if puntos > puntuacion["puntos"]:
-            retorno = i
-            break
-    return retorno
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 def verificar_correcta(i,seleccion, correcta):
     if i == correcta:
         color = Fore.GREEN
@@ -49,6 +42,7 @@ def verificar_correcta(i,seleccion, correcta):
 
 def calcular_porcentaje(Dividendo,Divisor):
     return (Dividendo / Divisor) * 100
+
 #======================================================== OBTENER DATOS ========================================================#
 
 def pregunta_aleatoria(preguntas,elegidas):
@@ -58,7 +52,7 @@ def pregunta_aleatoria(preguntas,elegidas):
             vueltas = 0
             pregunta_actual = preguntas[random.randint(0, 4)]
             for pregunta in elegidas:
-                if pregunta_actual["pregunta"] == pregunta["pregunta"]:
+                if pregunta_actual['pregunta'] == pregunta:
                     break
                 vueltas += 1
     else:
@@ -67,25 +61,29 @@ def pregunta_aleatoria(preguntas,elegidas):
 
 def preguntas_csv(categoria,dificultad):
     preguntas_ronda = {}
-    with open("datos/preguntas.csv", encoding="utf-8") as archivo:
-        for i in range(0, categoria + dificultad + 1):
-            archivo.readline()
-        
-        for i in range(0, 5):
-            pregunta = archivo.readline()
-            pregunta = re.split(r',', pregunta.strip())
-            preguntas_ronda[i] = {
-                "pregunta": pregunta[0],
-                "respuestas": pregunta[1:4],
-                "correcta": int(pregunta[4]),
-                "puntaje": int(pregunta[6])
-            }
+    try:
+        with open("datos/preguntas.csv", encoding="utf-8") as archivo:
+            for i in range(0, categoria + dificultad + 1):
+                archivo.readline()
+            
+            for i in range(0, 5):
+                pregunta = archivo.readline()
+                pregunta = re.split(r',', pregunta.strip())
+                preguntas_ronda[i] = {
+                    "pregunta": pregunta[0],
+                    "respuestas": pregunta[1:4],
+                    "correcta": int(pregunta[4]),
+                    "puntaje": int(pregunta[6])
+                }
+    except Exception:
+        preguntas_ronda = {}
+        print("algo fallo al leer el archivo")
     return preguntas_ronda
 
 def preguntas_y_respuestas(categoria,dificultad,elegidas):
     preguntas= preguntas_csv(categoria,dificultad)
     pregunta_actual = pregunta_aleatoria(preguntas,elegidas)
-    elegidas.append(pregunta_actual)
+    elegidas.add(pregunta_actual['pregunta'])
     pregunta = pregunta_actual["pregunta"]
     respuestas = pregunta_actual["respuestas"]
     correcta = pregunta_actual["correcta"]
@@ -93,21 +91,28 @@ def preguntas_y_respuestas(categoria,dificultad,elegidas):
     return pregunta, respuestas, correcta, puntaje
 
 def obtener_configuracion(dificultad):
-    with open("datos/configuracion.json", "r", encoding="utf-8") as f:
-        config = json.load(f)
-    
-    tiempo_barra = 0
-    barra_largo = config["barra_largo"]
-    rondas = config["rondas"]
-    intentos_mini = config["intentos_mini"]
-    
-    match dificultad:
-        case 0:
-            tiempo_barra = config["dificultad_facil"]
-        case 5:
-            tiempo_barra = config["dificultad_normal"]
-        case 10:
-            tiempo_barra = config["dificultad_dificil"]
+    try:
+        with open("datos/configuracion.json", "r", encoding="utf-8") as f:
+            config = json.load(f)
+        
+        tiempo_barra = 0
+        barra_largo = config["barra_largo"]
+        rondas = config["rondas"]
+        intentos_mini = config["intentos_mini"]
+        
+        match dificultad:
+            case 0:
+                tiempo_barra = config["dificultad_facil"]
+            case 5:
+                tiempo_barra = config["dificultad_normal"]
+            case 10:
+                tiempo_barra = config["dificultad_dificil"]
+    except Exception:
+        rondas=None
+        tiempo_barra=None
+        barra_largo=None
+        intentos_mini=None
+        print("algo fallo al leer el archivo")
     return rondas, tiempo_barra, barra_largo, intentos_mini
 
 def mostrar_categoria(categoria):
@@ -148,7 +153,7 @@ def finalizar(inicio,barra_largo,tiempo_barra):
         retorno = True
     return retorno
 
-def detectar_tecla():
+def definir_tecla():
     tecla = msvcrt.getch()
     retorno = 0
     match tecla:
@@ -167,7 +172,8 @@ def mayor_mejor_puntos(jugador1,jugador2):
         retorno = True
     return retorno
 
-#===========================================================MINI JUEGOS===========================================================#
+#===========================================================MINI JUEGO===========================================================#
+
 def validar_ta_te_ti(seleccion,fila,columna,tablero):
     retorno=""
     if type(seleccion) == int and seleccion >=1 and seleccion <= 9:
@@ -231,7 +237,7 @@ def obtener_posicion():
             print("ingrese solo un numero del 1 al 9")
     return int(seleccion)
 
-#----------Perfiles----------#
+#===========================================================PERFILES===========================================================#
 def agregar_usuario():
     jugadores=obtener_jugadores()
     while True:
@@ -261,12 +267,19 @@ def agregar_usuario():
             print("Ese nombre ya existe, prueba con otro")
 
 def cargar_jugadores(jugadores):
-    with open("datos/jugadores.json", "w", encoding="utf-8") as f:
-        json.dump(jugadores, f, indent=4, ensure_ascii=False)
+    try:
+        with open("datos/jugadores.json", "w", encoding="utf-8") as f:
+            json.dump(jugadores, f, indent=4, ensure_ascii=False)
+    except Exception:
+        print("algo fallo al leer el archivo")
 
 def obtener_jugadores():
-    with open("datos/jugadores.json", "r", encoding="utf-8") as f:
-        jugadores = json.load(f)
+    try:
+        with open("datos/jugadores.json", "r", encoding="utf-8") as f:
+            jugadores = json.load(f)
+    except Exception:
+        jugadores = []
+        print("algo fallo al leer el archivo")
     return jugadores
 
 def obtener_jugador(jugadores, nombre):

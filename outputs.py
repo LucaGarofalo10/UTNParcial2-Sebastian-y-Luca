@@ -1,31 +1,9 @@
 import os
-import msvcrt
-import time
 import random
 from colorama import init, Fore, Style
 from datos import *
 
-#--------- Tutorial ----------# 
-def tutorial():
-    segundo_anterior = int(time.time())
-    seleccion = 1
-    respuestas = ["Estas seran las respuestas","Puedes elegirla con → pero si se acaba el tiempo","Se elige la que estes seleccionando"]
-    while True:
-        # Actualizar pantalla cada segundo
-        if int(time.time()) != segundo_anterior:
-            segundo_anterior = int(time.time())
-            mostrar_tutorial(seleccion,respuestas)
-        
-        # Cambiar opcion
-        if msvcrt.kbhit():
-            match detectar_tecla():
-                case 1:
-                    seleccion = (seleccion - 1) % len(respuestas)
-                case 2:
-                    seleccion = (seleccion + 1) % len(respuestas)
-                case 3:
-                    break
-            mostrar_tutorial(seleccion,respuestas)
+#--------- Tutorial ----------#
 
 def mostrar_tutorial(seleccion,respuestas):
     os.system('cls')  # limpiar pantalla en Windows
@@ -39,16 +17,17 @@ def mostrar_tutorial(seleccion,respuestas):
     print("\n[=== Esta barra se ira reduciendo con el tiempo ===]")
 
 #---------- Preparación ----------#
-def elegir_categoria_dificultad(texto,opciones,categoria):
+def elegir_categoria_dificultad(texto,opciones,categoria_dificultad):
     while True:
         os.system('cls')
-        print("Selecciona una categoría:")
+        print(f"Selecciona una {categoria_dificultad}:")
         print(f"1. {texto[0]}")
         print(f"2. {texto[1]}")
         print(f"3. {texto[2]}")
-        if categoria:
+        if categoria_dificultad=="categoria":
             print("4. Aleatoria")
         parametro=input()
+        
         match parametro:
             case "1":
                 parametro = opciones[0]
@@ -60,19 +39,18 @@ def elegir_categoria_dificultad(texto,opciones,categoria):
                 parametro = opciones[2]
                 break
             case "4":
-                if categoria:
+                if categoria_dificultad=="categoria":
                     parametro = random.choice([0, 15, 30])
                     break
                 else:
                     print("Opción inválida. Intenta de nuevo.")
-                    os.system('pause')
             case _:
                 print("Opción inválida. Intenta de nuevo.")
-                os.system('pause')
+        os.system('pause')
     return parametro
 
-#---------- Juego ----------# 
-def mostrar_juego(inicio,seleccion,barra_largo,tiempo_barra,pregunta,respuestas,respuesta_correcta,ronda,categoria,correcta):
+#---------- Juego ----------#
+def mostrar_juego(seleccion,correcta,inicio,barra_largo,tiempo_barra,pregunta,respuestas,respuesta_correcta,ronda,categoria):
     os.system('cls')  # limpiar pantalla en Windows
     color = Style.RESET_ALL
     print(f"Categoría: {mostrar_categoria(categoria)} | RONDA {ronda+1}/5\n")
