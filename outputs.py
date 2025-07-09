@@ -108,21 +108,6 @@ def mostrar_mensaje_resultado(seleccion, correcta):
         print("Opcion " + Fore.RED + "INCORRECTA" + Style.RESET_ALL + " pero puede que tengas otra oportunidad")
     os.system('pause')
 
-def mayor_mejor_puntos(jugador1,jugador2):
-    retorno =False
-    if jugador1['mejor_puntos'] < jugador2['mejor_puntos']:
-        retorno = True
-    return retorno
-
-def ordenar_lista_burbujeo(lista,comprobacion):
-    for i in range(0,len(lista)):
-        for j in range(i+1,len(lista)):
-            if comprobacion(lista[i],lista[j]):
-                aux=lista[j]
-                lista[j]=lista[i]
-                lista[i]=aux
-    return lista
-
 def mostrar_top():
     TOP=ordenar_lista_burbujeo(obtener_top(),mayor_mejor_puntos)
     a=""
