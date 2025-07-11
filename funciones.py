@@ -107,6 +107,7 @@ def jugar_ronda(barra_largo, tiempo_barra, seleccion, pregunta, respuestas, corr
 def detectar_tecla(seleccion,respuestas,tutorial,parametros_seleccionar,funcion_mostrar,parametros_mostrar):
     terminar=False
     resultado=False
+    
     intentos_mini=parametros_seleccionar[2]
     aciertos=parametros_seleccionar[3]
     
@@ -121,7 +122,10 @@ def detectar_tecla(seleccion,respuestas,tutorial,parametros_seleccionar,funcion_
                 if not tutorial:
                     funcion_mostrar(seleccion,True,*parametros_mostrar)
                     resultado,intentos_mini,aciertos=seleccionar_respuesta(*parametros_seleccionar)
-        funcion_mostrar(seleccion,False,*parametros_mostrar,)
+        if tutorial:
+            funcion_mostrar(seleccion,respuestas)
+        else:
+            funcion_mostrar(seleccion,False,*parametros_mostrar)
     
     return resultado,terminar,seleccion,intentos_mini,aciertos
 
@@ -154,7 +158,7 @@ def tutorial():
             mostrar_tutorial(seleccion,respuestas)
         
         # Cambiar opcion
-        a,terminar,seleccion,b,c=detectar_tecla(seleccion,respuestas,True,(None),mostrar_tutorial,(seleccion,respuestas))
+        a,terminar,seleccion,b,c=detectar_tecla(seleccion,respuestas,True,(0,0,0,0),mostrar_tutorial,())
         if terminar:
             break
 
@@ -177,11 +181,12 @@ def menu_perfiles(perfil):
                 os.system('pause')
     return perfil
 
-#----------Mini juego----------#
+#----------Mini juegos----------#
 def mini_juego():
     resultado = None
     while resultado == None:
-        resultado = ta_te_ti()
+        funcion_mini_juego=random.choice([ta_te_ti,adivina_numero])
+        resultado = funcion_mini_juego()
     return resultado
 
 def ta_te_ti():
@@ -212,5 +217,14 @@ def ta_te_ti():
             break
         
     return ganador
+
+def adivina_numero():
+    tutorial_adivina_numero()
+    resultado=adivina_numero_recursivo(random.randint(1, 100),1,100,0)
+    if resultado:
+        mensaje_resultado("X")
+    else:
+        mensaje_resultado("O")
+    return resultado
 
 jugar_runer_preguntados()

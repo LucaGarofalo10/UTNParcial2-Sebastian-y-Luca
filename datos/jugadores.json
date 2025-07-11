@@ -14,14 +14,14 @@
     {
         "nombre": "Jugador2",
         "contraseña": "Jugador2",
-        "aciertos": 8,
-        "errores": 2,
-        "tiempo_total": 52.6,
-        "partidas": 1,
-        "mejor_puntos": 2,
-        "mejor_tiempo": 52.6,
-        "mejor_dificultad": "Difícil",
-        "mejor_categoria": "Entretenimiento"
+        "aciertos": 12,
+        "errores": 3,
+        "tiempo_total": 103.82837567329406,
+        "partidas": 2,
+        "mejor_puntos": 1188,
+        "mejor_tiempo": 51.22837567329407,
+        "mejor_dificultad": 0,
+        "mejor_categoria": 0
     },
     {
         "nombre": "Jugador3",
@@ -86,6 +86,18 @@
     {
         "nombre": "exit",
         "contraseña": "exit",
+        "aciertos": 0,
+        "errores": 0,
+        "tiempo_total": 0.0,
+        "partidas": 0,
+        "mejor_puntos": 0,
+        "mejor_tiempo": 0.0,
+        "mejor_dificultad": "",
+        "mejor_categoria": ""
+    },
+    {
+        "nombre": "santi",
+        "contraseña": "santi",
         "aciertos": 0,
         "errores": 0,
         "tiempo_total": 0.0,

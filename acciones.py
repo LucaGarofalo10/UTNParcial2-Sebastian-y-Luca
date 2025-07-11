@@ -20,7 +20,9 @@ def comprobar_victoria(puntos, categoria, dificultad, aciertos, rondas, ronda, t
     
     return victoria, perfil
 
-#----------Mini juego----------#
+#================================================MINI JUEGOS================================================#
+
+#----------ta te ti----------#
 def turno_jugador(tablero):
     mensaje=""
     while mensaje!="ok":
@@ -49,6 +51,41 @@ def turno_maquina(tablero):
         if mensaje == "ok":
             tablero[fila][columna]="O"
     return tablero
+
+#----------numero aleatorio----------#
+def adivina_numero_recursivo(aleatorio,inicio,fin,iteracion):
+    os.system('pause')
+    if iteracion>6:
+        retorno=False
+    else:
+        numero=recivir_numero(inicio,fin)
+        
+        if numero==aleatorio:
+            retorno=True
+        else:
+            if numero>aleatorio:
+                fin=numero-1
+            else:
+                inicio=numero+1
+            retorno=adivina_numero_recursivo(aleatorio,inicio,fin,iteracion+1)
+    return retorno
+
+def recivir_numero(inicio,fin):
+    while True:
+        os.system('cls')
+        numero=input(f"Adivina el numero del {inicio} al {fin}\n")
+        if es_numero(numero):
+            numero=int(numero)
+            if numero>=inicio and numero<=fin:
+                break
+            else:
+                print(f"Valor invalido, tiene que estar entre {inicio} y {fin}")
+                os.system('pause')
+        else:
+            print("ingrese un numero")
+            os.system('pause')
+    
+    return numero
 
 #----------Perfiles----------#
 def cambiar_cuenta(perfil):

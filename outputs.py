@@ -92,11 +92,13 @@ def mostrar_top():
     os.system('cls')
     if len(TOP) != 0:
         print("TOP Puntuaciones:\n")
+        print("--------------------")
         posicion=0
         for jugador in TOP:
             posicion+=1
             print(f"{posicion}.")
             print(f"   {jugador['nombre']:<10}{jugador['mejor_puntos']:>6}\n")
+            print("--------------------")
             
     else:
         print("No hay puntuaciones guardadas.")
@@ -114,7 +116,9 @@ def mensaje_victoria(puntos, categoria, dificultad, aciertos, rondas, tiempo_pro
     print("#-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-#\n")
     os.system('pause')
 
-#---------mini juegos---------#
+#================================================MINI JUEGOS================================================#
+
+#----------ta te ti----------#
 def precentacion_ta_te_ti(tablero):
     os.system('cls')
     print("Parece que te has desviado del camino, pero si le ganas este ta-te-ti a un vagabundo te guiara de vuelta al camino\n")
@@ -131,9 +135,7 @@ def mostrar_ta_te_ti(tablero):
         if i<2:
             print("\n-----------")
 
-def resultado_ta_te_ti(tablero,marca):
-    os.system('cls')
-    mostrar_ta_te_ti(tablero)
+def mensaje_resultado(marca):
     match marca:
         case "X":
             print(f"\n\n{Fore.GREEN}Ganaste vos{Style.RESET_ALL}. Por lo que podras seguir jugando")
@@ -142,6 +144,18 @@ def resultado_ta_te_ti(tablero,marca):
         case "":
             print(f"\n\nEmpataste con el vagabundo. Vuelve a intentarlo")
     os.system('pause')
+
+def resultado_ta_te_ti(tablero,marca):
+    os.system('cls')
+    mostrar_ta_te_ti(tablero)
+    mensaje_resultado(marca)
+
+#----------numero aleatorio----------#
+def tutorial_adivina_numero():
+    os.system('cls')
+    print("Parece que te has desviado del camino, pero si adivinas en que numero piensa este vagabundo te guiara de vuelta al camino")
+    print("\nPero te va a ayudar, te va a dar 7 intentos, y si no acertas te dira si el numero es mayor o menor")
+    print("suerte ;)\n")
 
 #----------Perfiles----------#
 def mostrar_menu_perfiles(perfil):

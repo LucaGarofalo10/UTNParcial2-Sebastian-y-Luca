@@ -43,6 +43,17 @@ def verificar_correcta(i,seleccion, correcta):
 def calcular_porcentaje(Dividendo,Divisor):
     return (Dividendo / Divisor) * 100
 
+def es_numero(ingreso):
+    retorno=True
+    if len(ingreso)>0:
+        for caracter in ingreso:
+            if ord(caracter) < ord('0') or ord(caracter) > ord('9'):
+                retorno=False
+                break
+    else:
+        retorno=False
+    return retorno
+
 #======================================================== OBTENER DATOS ========================================================#
 
 def pregunta_aleatoria(preguntas,elegidas):
@@ -217,7 +228,6 @@ def comprobacion_recursiva(tablero,inicio,x,y,anterior,iteracion):
     siguiente=[inicio[0]+x,inicio[1]+y]
     if iteracion < 3:
         if iteracion == 0 or tablero[inicio[0]][inicio[1]] == anterior and tablero[inicio[0]][inicio[1]] != " ":
-            
             retorno = comprobacion_recursiva(tablero,siguiente,x,y,tablero[inicio[0]][inicio[1]],iteracion+1)  # <--- ACA
         else:
             retorno=False,"0"
@@ -229,7 +239,7 @@ def obtener_posicion():
     while True:
         seleccion=input("\n\n")
         if len(seleccion)==1:
-            if ord(seleccion) >= ord('1') and ord(seleccion) <= ord('9'):
+            if es_numero(seleccion):
                 break
             else:
                 print("ingrese un numero")
