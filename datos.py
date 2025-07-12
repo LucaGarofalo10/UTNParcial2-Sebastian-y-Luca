@@ -89,6 +89,12 @@ def preguntas_csv(categoria,dificultad):
     except Exception:
         preguntas_ronda = {}
         print("algo fallo al leer el archivo")
+    except ValueError:
+        preguntas_ronda = {}
+        print("alguna convercion de valores fallo")
+    except IndexError:
+        preguntas_ronda = {}
+        print("formato de línea incorrecto")
     return preguntas_ronda
 
 def preguntas_y_respuestas(categoria,dificultad,elegidas):
@@ -124,6 +130,18 @@ def obtener_configuracion(dificultad):
         barra_largo=None
         intentos_mini=None
         print("algo fallo al leer el archivo")
+    except ValueError:
+        rondas=None
+        tiempo_barra=None
+        barra_largo=None
+        intentos_mini=None
+        print("alguna convercion de valores fallo")
+    except IndexError:
+        rondas=None
+        tiempo_barra=None
+        barra_largo=None
+        intentos_mini=None
+        print("formato de línea incorrecto")
     return rondas, tiempo_barra, barra_largo, intentos_mini
 
 def mostrar_categoria(categoria):
@@ -183,70 +201,6 @@ def mayor_mejor_puntos(jugador1,jugador2):
         retorno = True
     return retorno
 
-#===========================================================MINI JUEGO===========================================================#
-
-def validar_ta_te_ti(seleccion,fila,columna,tablero):
-    retorno=""
-    if type(seleccion) == int and seleccion >=1 and seleccion <= 9:
-        if tablero[fila][columna] != "X" and tablero[fila][columna] != "O":
-            retorno = "ok"
-        else:
-            retorno = "La casilla ya está ocupada, elija otra."
-    else:
-        retorno = "ingreso invalido, ingrese un numero del 1 al 9"
-    
-    return retorno
-
-def calcular_fila_columna(seleccion):
-    fila = (seleccion - 1) // 3
-    columna = (seleccion - 1) % 3
-    return fila,columna
-
-def verificar_victoria(tablero):
-    #revisar filas
-    for i in range(0,3):
-        resultado,marca=comprobacion_recursiva(tablero,[i,0],0,1,"",0)
-        if resultado:
-            return resultado,marca
-    
-    #revisar columnas
-    for i in range(0,3):
-        resultado,marca=comprobacion_recursiva(tablero,[0,i],1,0,"",0)
-        if resultado:
-            return resultado,marca
-    
-    #revisar diagonales
-    for i in range(0,3,2):
-        resultado,marca=comprobacion_recursiva(tablero,[0,i],1,1-i,"",0)
-        if resultado:
-            return resultado,marca
-    
-    return False,""
-
-def comprobacion_recursiva(tablero,inicio,x,y,anterior,iteracion):
-    retorno=False,"0"
-    siguiente=[inicio[0]+x,inicio[1]+y]
-    if iteracion < 3:
-        if iteracion == 0 or tablero[inicio[0]][inicio[1]] == anterior and tablero[inicio[0]][inicio[1]] != " ":
-            retorno = comprobacion_recursiva(tablero,siguiente,x,y,tablero[inicio[0]][inicio[1]],iteracion+1)  # <--- ACA
-        else:
-            retorno=False,"0"
-    else:
-        retorno=True,anterior
-    return retorno
-
-def obtener_posicion():
-    while True:
-        seleccion=input("\n\n")
-        if len(seleccion)==1:
-            if es_numero(seleccion):
-                break
-            else:
-                print("ingrese un numero")
-        else:
-            print("ingrese solo un numero del 1 al 9")
-    return int(seleccion)
-
 #===========================================================PERFILES===========================================================#
 def agregar_usuario():
     jugadores=obtener_jugadores()
@@ -282,6 +236,10 @@ def cargar_jugadores(jugadores):
             json.dump(jugadores, f, indent=4, ensure_ascii=False)
     except Exception:
         print("algo fallo al leer el archivo")
+    except ValueError:
+        print("alguna convercion de valores fallo")
+    except IndexError:
+        print("formato de línea incorrecto")
 
 def obtener_jugadores():
     try:
@@ -290,6 +248,12 @@ def obtener_jugadores():
     except Exception:
         jugadores = []
         print("algo fallo al leer el archivo")
+    except ValueError:
+        jugadores = []
+        print("alguna convercion de valores fallo")
+    except IndexError:
+        jugadores = []
+        print("formato de línea incorrecto")
     return jugadores
 
 def obtener_jugador(jugadores, nombre):
@@ -320,7 +284,7 @@ def obtener_informacion_jugador(nombre):
         tiempo_promedio = jugador["tiempo_total"] / jugador["partidas"]
     else:
         tiempo_promedio = 0
-    return jugador, porcentaje_aciertos, porcentaje_errores, tiempo_promedio
+    return jugador, jugador['partidas'], porcentaje_aciertos, porcentaje_errores, tiempo_promedio
 
 def cambiar_datos_jugador(jugadores,nombre,puntos,aciertos,rondas,tiempo_partida,categoria,dificultad):
     for jugador in jugadores:

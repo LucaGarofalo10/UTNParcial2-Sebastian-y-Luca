@@ -4,7 +4,6 @@ from colorama import init, Fore, Style
 from datos import *
 
 #--------- Tutorial ----------#
-
 def mostrar_tutorial(seleccion,respuestas):
     os.system('cls')  # limpiar pantalla en Windows
     print("Para llegar a casa tenes que responder 5 preguntas correctamente, pero si te equivocas volves a empezar\n")
@@ -16,7 +15,7 @@ def mostrar_tutorial(seleccion,respuestas):
 
     print("\n[=== Esta barra se ira reduciendo con el tiempo ===]")
 
-#---------- Preparación ----------#
+#================================================JUEGO================================================#
 def elegir_categoria_dificultad(texto,opciones,categoria_dificultad):
     while True:
         os.system('cls')
@@ -49,7 +48,6 @@ def elegir_categoria_dificultad(texto,opciones,categoria_dificultad):
         os.system('pause')
     return parametro
 
-#---------- Juego ----------#
 def mostrar_juego(seleccion,correcta,inicio,barra_largo,tiempo_barra,pregunta,respuestas,respuesta_correcta,ronda,categoria):
     os.system('cls')  # limpiar pantalla en Windows
     color = Style.RESET_ALL
@@ -114,89 +112,6 @@ def mensaje_victoria(puntos, categoria, dificultad, aciertos, rondas, tiempo_pro
     print(f"Tiempo promedio por pregunta: {tiempo_promedio:.2f} segundos")
     print(f"\nCategoria: {categoria}  |  Dificultad: {dificultad}")
     print("#-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-#\n")
-    os.system('pause')
-
-#================================================MINI JUEGOS================================================#
-
-#----------ta te ti----------#
-def precentacion_ta_te_ti(tablero):
-    os.system('cls')
-    print("Parece que te has desviado del camino, pero si le ganas este ta-te-ti a un vagabundo te guiara de vuelta al camino\n")
-    mostrar_ta_te_ti(tablero)
-    print("\n\nSolo tienes que ingresar la casilla donde queres seleccionar, y luego el vagabundo eligira")
-    os.system('pause')
-
-def mostrar_ta_te_ti(tablero):
-    for i in range(0,len(tablero)):
-        for j in range(0,len(tablero[1])):
-            print(f" {tablero[i][j]}",end="")
-            if j<2:
-                print(" |",end="")
-        if i<2:
-            print("\n-----------")
-
-def mensaje_resultado(marca):
-    match marca:
-        case "X":
-            print(f"\n\n{Fore.GREEN}Ganaste vos{Style.RESET_ALL}. Por lo que podras seguir jugando")
-        case "O":
-            print(f"\n\n{Fore.RED}Gano el vagabundo{Style.RESET_ALL}. Empieza de 0 :c")
-        case "":
-            print(f"\n\nEmpataste con el vagabundo. Vuelve a intentarlo")
-    os.system('pause')
-
-def resultado_ta_te_ti(tablero,marca):
-    os.system('cls')
-    mostrar_ta_te_ti(tablero)
-    mensaje_resultado(marca)
-
-#----------numero aleatorio----------#
-def tutorial_adivina_numero():
-    os.system('cls')
-    print("Parece que te has desviado del camino, pero si adivinas en que numero piensa este vagabundo te guiara de vuelta al camino")
-    print("\nPero te va a ayudar, te va a dar 7 intentos, y si no acertas te dira si el numero es mayor o menor")
-    print("suerte ;)\n")
-
-#----------Perfiles----------#
-def mostrar_menu_perfiles(perfil):
-    os.system('cls')
-    if perfil != "ninguno":
-        print(f"Hola {perfil} ¿que queres hacer?\n")
-    else:
-        print(f"Bienvenido ¿quieres crearte una cuenta o seleccionar una?\n")
-    print("1. Informacion")
-    if perfil != "ninguno":
-        print("2. Cambiar cuenta")
-    else:
-        print("2. Seleccionar cuenta")
-    print("3. Crear cuenta")
-    print("4. Salir")
-
-def ver_informacion(perfil):
-    os.system('cls')
-    if perfil=="ninguno":
-        print("Parece ser que no estas en un perfi\ncrea o ingresa en uno para ver su informacion ;)\n")
-    else:
-        jugador, porcentaje_aciertos, porcentaje_errores, tiempo_promedio = obtener_informacion_jugador(perfil)
-        print("\n|------------Datos del jugador------------|")
-        print(f"Nombre: {jugador['nombre']}")
-        print(f"Porcentaje de aciertos: {porcentaje_aciertos:.2f}%")
-        print(f"Porcentaje de errores: {porcentaje_errores:.2f}%")
-        print(f"Tiempo promedio: {tiempo_promedio:.2f}s")
-        print("\n|--------------Mejor partida--------------|")
-        print(f"Puntos: {jugador['mejor_puntos']}")
-        print(f"Tiempo: {jugador['mejor_tiempo']}s")
-        print(f"Dificultad: {jugador['mejor_dificultad']}")
-        print(f"Categoría: {jugador['mejor_categoria']}")
-    os.system('pause')
-
-def mostrar_jugadores(jugadores):
-    for i, jugador in enumerate(jugadores, 1):
-        print(f"{i}. {jugador['nombre']}")
-
-def mensaje_ingreso(nombre):
-    os.system('cls')
-    print(f"Bienvenido {nombre}")
     os.system('pause')
 
 

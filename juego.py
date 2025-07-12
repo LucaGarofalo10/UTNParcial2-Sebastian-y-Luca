@@ -1,9 +1,10 @@
 import os
 import time
 from outputs import *
-from acciones import *
+from ta_te_ti import ta_te_ti
+from adivinar_numero import adivina_numero
+from perfiles import menu_perfiles,comprobar_sin_perfil
 
-#============================================================ MENU ============================================================#
 def menu_juego(perfil):
     salir = False
     categoria = 0
@@ -37,7 +38,6 @@ def menu_juego(perfil):
                 os.system('pause')
     return salir,categoria,dificultad,perfil
 
-#============================================================ JUEGO ============================================================#
 def jugar_runer_preguntados():
     perfil="ninguno"
     
@@ -146,7 +146,24 @@ def seleccionar_respuesta(seleccion,correcta,intentos_mini,aciertos):
             resultado=False
     return resultado,intentos_mini,aciertos
 
-#============================================================ TUTORIAL ============================================================#
+def comprobar_victoria(puntos, categoria, dificultad, aciertos, rondas, ronda, tiempo_partida, perfil):
+    victoria=False
+    
+    if ronda>=rondas:
+        mensaje_victoria(puntos, categoria, dificultad, aciertos, rondas, tiempo_partida/aciertos)
+        victoria=True
+        perfil=comprobar_sin_perfil(perfil)
+        
+        if perfil!="ninguno":
+            guardar_datos(puntos,aciertos,rondas,tiempo_partida,perfil,categoria,dificultad)
+            os.system('cls')
+            print("¡¡¡Datos guardado!!!")
+            print("Accede a perfiles para verlos reflejados")
+            os.system('pause')
+    
+    return victoria, perfil
+
+#--------------------tutorial--------------------#
 def tutorial():
     segundo_anterior = int(time.time())
     seleccion = 1
@@ -162,69 +179,12 @@ def tutorial():
         if terminar:
             break
 
-#============================================================ PERFILES ============================================================#
-def menu_perfiles(perfil):
-    while True:
-        mostrar_menu_perfiles(perfil)
-        opcion = input()
-        match opcion:
-            case "1":
-                ver_informacion(perfil)
-            case "2":
-                perfil = cambiar_cuenta(perfil)
-            case "3":
-                perfil = crear_cuenta(perfil)
-            case "4":
-                break
-            case _:
-                print("Opción inválida. Intenta de nuevo.")
-                os.system('pause')
-    return perfil
-
-#----------Mini juegos----------#
+#--------------------mini juegos--------------------#
 def mini_juego():
     resultado = None
     while resultado == None:
         funcion_mini_juego=random.choice([ta_te_ti,adivina_numero])
         resultado = funcion_mini_juego()
-    return resultado
-
-def ta_te_ti():
-    tablero = [["1","2","3"],["4","5","6"],["7","8","9"]]
-    turno=0
-    precentacion_ta_te_ti(tablero)
-    tablero = [[" "," "," "],[" "," "," "],[" "," "," "]]
-    while True:
-        turno+=1
-        
-        turno_jugador(tablero)
-        resultado,marca=verificar_victoria(tablero)
-        if resultado:
-            resultado_ta_te_ti(tablero,marca)
-            ganador=True
-            break
-        
-        if turno>=5:
-            resultado_ta_te_ti(tablero,"")
-            ganador=None
-            break
-        
-        turno_maquina(tablero)
-        resultado,marca=verificar_victoria(tablero)
-        if resultado:
-            resultado_ta_te_ti(tablero,marca)
-            ganador=False
-            break
-        
-    return ganador
-
-def adivina_numero():
-    tutorial_adivina_numero()
-    resultado=adivina_numero_recursivo(random.randint(1, 100),1,100,0)
-    if resultado:
-        mensaje_resultado("X")
-    else:
-        mensaje_resultado("O")
     return resultado
 
 jugar_runer_preguntados()

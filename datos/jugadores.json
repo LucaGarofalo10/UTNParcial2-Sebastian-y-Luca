@@ -74,12 +74,12 @@
     {
         "nombre": "gonza",
         "contraseña": "gonza",
-        "aciertos": 5,
+        "aciertos": 15,
         "errores": 0,
-        "tiempo_total": 5.901628494262695,
-        "partidas": 1,
-        "mejor_puntos": 3451,
-        "mejor_tiempo": 5.901628494262695,
+        "tiempo_total": 26.565502166748047,
+        "partidas": 3,
+        "mejor_puntos": 3574,
+        "mejor_tiempo": 3.475417375564575,
         "mejor_dificultad": 0,
         "mejor_categoria": 0
     },
