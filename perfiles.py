@@ -1,6 +1,7 @@
 import os
 from outputs import *
 
+
 def menu_perfiles(perfil):
     while True:
         mostrar_menu_perfiles(perfil)
@@ -16,16 +17,21 @@ def menu_perfiles(perfil):
                 break
             case _:
                 print("Opción inválida. Intenta de nuevo.")
-                os.system('pause')
+                os.system("pause")
     return perfil
 
-#Opcion 1
+
+# Opcion 1
 def ver_informacion(perfil):
-    os.system('cls')
-    if perfil=="ninguno":
-        print("Parece ser que no estas en un perfi\ncrea o ingresa en uno para ver su informacion ;)\n")
+    os.system("cls")
+    if perfil == "ninguno":
+        print(
+            "Parece ser que no estas en un perfi\ncrea o ingresa en uno para ver su informacion ;)\n"
+        )
     else:
-        jugador, partidas, porcentaje_aciertos, porcentaje_errores, tiempo_promedio = obtener_informacion_jugador(perfil)
+        jugador, partidas, porcentaje_aciertos, porcentaje_errores, tiempo_promedio = (
+            obtener_informacion_jugador(perfil)
+        )
         print("\n|------------Datos del jugador------------|")
         print(f"Nombre: {jugador['nombre']}")
         print(f"Partidas: {partidas}")
@@ -37,91 +43,96 @@ def ver_informacion(perfil):
         print(f"Tiempo: {jugador['mejor_tiempo']:.2f}s")
         print(f"Dificultad: {jugador['mejor_dificultad']}")
         print(f"Categoría: {jugador['mejor_categoria']}")
-    os.system('pause')
+    os.system("pause")
 
-#Opcion 2
+
+# Opcion 2
 def cambiar_cuenta(perfil):
     while True:
         jugadores = obtener_jugadores()
-        nombre=ingresar_nombre(jugadores)
-        
-        #reiniciar si eligui la cuenta en la que esta
-        if nombre==perfil:
-            os.system('cls')
+        nombre = ingresar_nombre(jugadores)
+
+        # reiniciar si eligui la cuenta en la que esta
+        if nombre == perfil:
+            os.system("cls")
             print("Ya estas en esta cuenta")
-            os.system('pause')
+            os.system("pause")
             continue
-        
-        #salir si pone exit
-        if nombre=="exit":
+
+        # salir si pone exit
+        if nombre == "exit":
             break
-        
-        #verificar si la cuenta existe
-        jugador,encontrado = obtener_jugador(jugadores, nombre)
+
+        # verificar si la cuenta existe
+        jugador, encontrado = obtener_jugador(jugadores, nombre)
         if encontrado:
-            #verificar si la contraseña coincide
+            # verificar si la contraseña coincide
             if ingresar_contraseña(jugador):
-                perfil=nombre
+                perfil = nombre
             break
         else:
             print("Cuenta no encontrada, intente otra ves")
-            os.system('pause')
+            os.system("pause")
     return perfil
 
-#Opcion 3
+
+# Opcion 3
 def crear_cuenta(perfil):
-    jugadores,nuevo_jugador = agregar_usuario()
-    if nuevo_jugador['nombre']=="":
+    jugadores, nuevo_jugador = agregar_usuario()
+    if nuevo_jugador["nombre"] == "":
         return perfil
     cargar_jugadores(jugadores)
-    return nuevo_jugador['nombre']
+    return nuevo_jugador["nombre"]
+
 
 def ingresar_contraseña(jugador):
     retorno = False
-    #ingresar directamente si no tiene contraseña
+    # ingresar directamente si no tiene contraseña
     if sin_contraseña(jugador):
-        mensaje_ingreso(jugador['nombre'])
+        mensaje_ingreso(jugador["nombre"])
         retorno = True
     else:
         while True:
-            os.system('cls')
+            os.system("cls")
             print("Ingrese la contraseña")
             print("'exit' para cancelar")
             contraseña = input("\n")
-            
-            #salir si pone exit
-            if contraseña=="exit":
+
+            # salir si pone exit
+            if contraseña == "exit":
                 retorno = True
                 break
-            
-            #comprobar si la contraseña coincide y volver a pedirla si no coincide
-            if jugador["contraseña"]==contraseña:
+
+            # comprobar si la contraseña coincide y volver a pedirla si no coincide
+            if jugador["contraseña"] == contraseña:
                 retorno = True
-                mensaje_ingreso(jugador['nombre'])
+                mensaje_ingreso(jugador["nombre"])
                 break
             else:
-                os.system('cls')
+                os.system("cls")
                 print("Contraseña incorrecta")
-                os.system('pause')
+                os.system("pause")
     return retorno
 
+
 def ingresar_nombre(jugadores):
-    os.system('cls')
+    os.system("cls")
     print("¿A que cuenta queres cambiar?\n")
     mostrar_jugadores(jugadores)
     print("'exit' para cancelar")
-    nombre=input("\nIngrese el nombre de la cuenta:\n")
+    nombre = input("\nIngrese el nombre de la cuenta:\n")
     return nombre
+
 
 def comprobar_sin_perfil(perfil):
     while True:
-        os.system('cls')
-        if perfil=="ninguno":
+        os.system("cls")
+        if perfil == "ninguno":
             print("Al parecer no tienes un perfil ¿que quieres hacer entonces?\n")
             print("1. Ingresar en un perfil")
             print("2. Crear un perfil")
             print("3. Salir (se perdera tu puntuacion)")
-            opcion=input("\n")
+            opcion = input("\n")
             match opcion:
                 case "1":
                     perfil = cambiar_cuenta(perfil)
@@ -133,12 +144,13 @@ def comprobar_sin_perfil(perfil):
                     break
                 case _:
                     print("Opción inválida. Intenta de nuevo.")
-                    os.system('pause')
+                    os.system("pause")
     return perfil
 
-#-------------------outputs-------------------#
+
+# -------------------outputs-------------------#
 def mostrar_menu_perfiles(perfil):
-    os.system('cls')
+    os.system("cls")
     if perfil != "ninguno":
         print(f"Hola {perfil} ¿que queres hacer?\n")
     else:
@@ -151,11 +163,13 @@ def mostrar_menu_perfiles(perfil):
     print("3. Crear cuenta")
     print("4. Salir")
 
+
 def mostrar_jugadores(jugadores):
     for i, jugador in enumerate(jugadores, 1):
         print(f"{i}. {jugador['nombre']}")
 
+
 def mensaje_ingreso(nombre):
-    os.system('cls')
+    os.system("cls")
     print(f"Bienvenido {nombre}")
-    os.system('pause')
+    os.system("pause")
